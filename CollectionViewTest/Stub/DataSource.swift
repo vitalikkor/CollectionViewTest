@@ -62,7 +62,7 @@ class DataSource {
         let totEvent31 = CalendarEvents.totEvent(CalendarTOTEvent(uid: "TOT31", dateInterval: DateInterval(start: date3.addingTimeInterval(TimeInterval(3600*2)), duration: TimeInterval(3600)), name: "tot-t", spanType: SnapType.hours, timeOff: "String", type: "String"))
         eventDay3.events.append(contentsOf: [generalEvent12,totEvent31,generalEvent11])
         
-        //return [eventDay1, eventDay2, eventDay3]
+        return [eventDay1, eventDay2, eventDay3]
         
         var eventDaysArray: [CalendarEventDay] = []
         for day in 1...105 {
