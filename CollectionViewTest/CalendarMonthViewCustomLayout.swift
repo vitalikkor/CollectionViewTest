@@ -10,9 +10,6 @@ import UIKit
 
 protocol CalendarMonthViewCustomLayoutDataSource: class {
     func layoutParams(for indexPath: IndexPath) -> MonthSectionEventLayout
-//    func dateInterval(by indexPath: IndexPath) -> DateInterval
-//    func daysDurationCell(with indexPath: IndexPath) -> Int
-//    func doesCellPlacedEarlier(cellIndexPath: IndexPath) -> Bool
 }
 
 class CalendarMonthViewCustomLayout: UICollectionViewLayout {
@@ -35,34 +32,28 @@ class CalendarMonthViewCustomLayout: UICollectionViewLayout {
     }
     weak var dataSource: CalendarMonthViewCustomLayoutDataSource?
     //Config
-    let columnsCountPerScreen: CGFloat = 7
-    let rowsCountPerScreen: CGFloat = 5
+    let columnsCountPerScreen: Int = 7
+    let sectionsCountPerScreen: Int = 5
     let separatorLineWidth: CGFloat = 0.6
     let cellHeight: CGFloat = 25
     let verticalCellsDistance: CGFloat = 2
-    let cellsInsetsInsideTile = UIEdgeInsets(top: 40, left: 0, bottom: 30, right: 0)
+    let cellsInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
+    let cellsTopOffset: CGFloat = 40
     var columnWidth: CGFloat {
         return (collectionView?.frame.width ?? 0)/CGFloat(totalColumnsCount)
     }
-
-    var maxVisibleCellPerSection: Int {
-        let tileFrame = CGRect(origin: .zero, size: tileSize)
-        let frameToPresentCells = UIEdgeInsetsInsetRect(tileFrame, cellsInsetsInsideTile)
-        let count = frameToPresentCells.height/(cellHeight + verticalCellsDistance).rounded(FloatingPointRoundingRule.down)
-        return Int(count)
-    }
     
-    var totalRowsCount: Int {
-        return 15//collectionView?.numberOfSections ?? 0
+    var totalSectionsCount: Int {
+        return collectionView?.numberOfSections ?? 0
     }
     
     var totalColumnsCount: Int {
-        return 7
+        return columnsCountPerScreen
     }
     
-    var tileSize: CGSize  {
+    var sectionSize: CGSize  {
         let collectionViewSize: CGSize = collectionView?.bounds.size ?? .zero
-        return CGSize(width: collectionViewSize.width, height: collectionViewSize.height/rowsCountPerScreen)
+        return CGSize(width: collectionViewSize.width, height: collectionViewSize.height/CGFloat(sectionsCountPerScreen))
     }
 
     private var oldBounds = CGRect.zero
@@ -131,15 +122,14 @@ class CalendarMonthViewCustomLayout: UICollectionViewLayout {
         for section in 0..<collectionView.numberOfSections {
             //handle day's tiles attributes
             let indexPath = IndexPath(item: 0, section: section)
-            let locationY = tileSize.height*CGFloat(section)
+            let locationY = sectionSize.height*CGFloat(section)
             let supplementaryAttribut = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: Element.supplementaryView.kind, with: indexPath)
-            supplementaryAttribut.frame = CGRect(origin: CGPoint(x: 0, y: locationY), size: tileSize)
+            supplementaryAttribut.frame = CGRect(origin: CGPoint(x: 0, y: locationY), size: sectionSize)
             supplementaryAttribut.zIndex = Zindex.supplementaryView
             cashedAttributs[Element.supplementaryView]?[indexPath] = supplementaryAttribut
             fillCellsAttributes(for: section)
         }
-        
-        contentHeight = tileSize.height*CGFloat(totalRowsCount)
+        contentHeight = sectionSize.height*CGFloat(totalSectionsCount)
         fillSeparatorsAttributes()
         
     }
@@ -157,9 +147,11 @@ class CalendarMonthViewCustomLayout: UICollectionViewLayout {
             let indexPath = IndexPath(item: i, section: section)
             let layoutParams = dataSource.layoutParams(for: indexPath)
             let cellAttributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
-            let origin = CGPoint(x: CGFloat(layoutParams.column)*columnWidth, y: CGFloat(layoutParams.row)*tileSize.height/3)
-            let size = CGSize(width: CGFloat(layoutParams.duration)*columnWidth, height: cellHeight + verticalCellsDistance)
-            cellAttributes.frame = CGRect(origin: origin, size: size)
+            let origin = CGPoint(x: CGFloat(layoutParams.column)*columnWidth, y:
+                CGFloat(layoutParams.row)*(cellHeight+verticalCellsDistance)+cellsTopOffset+CGFloat(section)*sectionSize.height)
+            let size = CGSize(width: CGFloat(layoutParams.duration)*columnWidth, height: cellHeight)
+            let frame = UIEdgeInsetsInsetRect(CGRect(origin: origin, size: size), cellsInset)
+            cellAttributes.frame = frame
             cellAttributes.zIndex = Zindex.cellView
             cashedAttributs[Element.cellView]?[indexPath] = cellAttributes
         }
@@ -170,7 +162,7 @@ class CalendarMonthViewCustomLayout: UICollectionViewLayout {
         //add horizontal view-separator
         for row in 0..<sectionCount {
             let indexPath = IndexPath(row: 0, section: row)
-            let rawLocationY = tileSize.height * CGFloat(row)
+            let rawLocationY = sectionSize.height * CGFloat(row)
             let locationY = row == 0 ? rawLocationY : rawLocationY - separatorLineWidth
             let horizontalLineSize = CGSize(width: collectionViewContentSize.width, height: separatorLineWidth)
             let decoratorHorizontalAttribut = UICollectionViewLayoutAttributes(forDecorationViewOfKind: Element.decoratorHorizontalView.kind, with: indexPath)
@@ -181,7 +173,7 @@ class CalendarMonthViewCustomLayout: UICollectionViewLayout {
         //add vertical view-separator
         for column in 0...(totalColumnsCount) {
             let indexPath = IndexPath(row: 0, section: column)
-            let rawLocationX = tileSize.width/columnsCountPerScreen * CGFloat(column)
+            let rawLocationX = sectionSize.width/CGFloat(columnsCountPerScreen) * CGFloat(column)
             let locationX = column == 0 ? rawLocationX : rawLocationX - separatorLineWidth
             let decoratorVerticalAttribut = UICollectionViewLayoutAttributes(forDecorationViewOfKind: Element.decoratorVerticalView.kind, with: indexPath)
             let verticalLineSize = CGSize(width: separatorLineWidth, height:  collectionViewContentSize.height)
@@ -197,15 +189,6 @@ class CalendarMonthViewCustomLayout: UICollectionViewLayout {
         cashedAttributs[Element.decoratorVerticalView] = [IndexPath:UICollectionViewLayoutAttributes]()
         cashedAttributs[Element.decoratorHorizontalView] = [IndexPath:UICollectionViewLayoutAttributes]()
         cashedAttributs[Element.cellView] = [IndexPath:UICollectionViewLayoutAttributes]()
-    }
-
-    //returns row, column started from 0
-    private func matrixPosition(by sectionIndex: Int) -> (row: CGFloat, column: CGFloat) {
-        let index = CGFloat(sectionIndex) + 1 // +1 to conform range interval started from 1
-        let remaiderDiv = index.truncatingRemainder(dividingBy: columnsCountPerScreen )
-        let rowNumber = (index/columnsCountPerScreen ).rounded(FloatingPointRoundingRule.up)
-        let columnNumber = remaiderDiv == 0 ? index/(rowNumber) : remaiderDiv
-        return ((rowNumber - 1),(columnNumber - 1)) // -1 to conform range interval started from 0
     }
     
 }

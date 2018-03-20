@@ -19,7 +19,7 @@ class OneDayView: UIView {
         initialSetup()
     }
     
-    lazy var titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let label = UILabel(frame: self.frame)
         label.textColor = UIColor.black
         label.font = UIFont.italicSystemFont(ofSize: 10)
@@ -27,7 +27,7 @@ class OneDayView: UIView {
         return label
     }()
     
-    private(set) var dateString: String = "" {
+    var dateString: String = "" {
         didSet {
             titleLabel.text = dateString
         }
@@ -80,45 +80,36 @@ class CalendarMonthSupplementaryView: UICollectionReusableView {
             initialSetup()
         }
     }
-    
+    private lazy var weekStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.distribution = .fillEqually
+        stackView.alignment = .fill
+        return stackView
+    }()
     private(set) var dayViews: [OneDayView] = []
     
-    init(dateInterval: DateInterval, dateFormatter: DateFormatter, frame: CGRect = .zero) {
-        super.init(frame: frame)
-        self.dateInterval = dateInterval
-        self.dateFormatter = dateFormatter
-        initialSetup()
-    }
     
     private func initialSetup() {
         var daysInsideWeekInterval = [Date]()
-        dayViews.forEach{$0.removeFromSuperview()}
+        weekStackView.arrangedSubviews.forEach{$0.removeFromSuperview()}
         dayViews.removeAll()
+        self.addSubview(weekStackView)
+        weekStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
+        weekStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
+        weekStackView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        weekStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
         IteratableDateInterval(dateInterval).forEach{ daysInsideWeekInterval.append($0)}
         daysInsideWeekInterval.sort{$0<$1}
-        let viewsCount = max(daysInsideWeekInterval.count, 1)
-        let dayViewSize = CGSize(width: self.frame.width/CGFloat(viewsCount), height: self.frame.height)
         daysInsideWeekInterval.enumerated().forEach { (index, date) in
-            let dayViewframe = CGRect(origin: CGPoint(x: CGFloat(index)*dayViewSize.width, y: 0), size: dayViewSize)
-            let oneDayView = OneDayView(dateString: dateFormatter.string(from: date), frame: dayViewframe)
+            let oneDayView = OneDayView(dateString: dateFormatter.string(from: date))
             oneDayView.translatesAutoresizingMaskIntoConstraints = false
-            self.addSubview(oneDayView)
-            self.dayViews.append(oneDayView)
-            oneDayView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-            oneDayView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-            oneDayView.widthAnchor.constraint(greaterThanOrEqualToConstant: 0).isActive = true
-            if index == 0 {
-                oneDayView.widthAnchor.constraint(equalToConstant: dayViewSize.width).isActive = true
-                oneDayView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
-            } else if index == viewsCount - 1 {
-                oneDayView.widthAnchor.constraint(equalTo: dayViews[0].widthAnchor, multiplier: 1)
-                oneDayView.leadingAnchor.constraint(equalTo: dayViews[index-1].trailingAnchor).isActive = true
-                oneDayView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
-            } else {
-                oneDayView.widthAnchor.constraint(equalTo: dayViews[index-1].widthAnchor, multiplier: 1).isActive = true
-                oneDayView.leadingAnchor.constraint(equalTo: dayViews[index-1].trailingAnchor).isActive = true
-            }
+            weekStackView.addArrangedSubview(oneDayView)
         }
+    }
+    
+    private func update() {
+        
     }
     
     

@@ -12,7 +12,7 @@ class CalendarMonthEventViewCell: UICollectionViewCell {
     
     lazy var titleLabel: UILabel = {
         let label = UILabel(frame: contentView.frame)
-        label.text = "def"
+        label.text = ""
         label.textColor = UIColor.black
         label.font = UIFont.italicSystemFont(ofSize: 10)
         label.translatesAutoresizingMaskIntoConstraints = false

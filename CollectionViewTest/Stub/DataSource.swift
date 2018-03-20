@@ -11,10 +11,12 @@ import UIKit
 
 struct MonthSection {
     let dateInteval: DateInterval
-    var events: [MonthSectionEvent]
+    var visibleEvents: [MonthSectionEvent]
+    var hidenEvents: [CalendarEvents]
     
     init(dateInteval: DateInterval){
-        events = []
+        visibleEvents = []
+        hidenEvents = []
         self.dateInteval = dateInteval
     }
 }
@@ -60,15 +62,15 @@ class DataSource {
     }()
     
     private lazy var events: [CalendarEvents] = {
-        let date1 = dateFormatter.date(from: "2018-01-28T22:00:00.000+0000")!.getStartOfDay()
+        let date1 = dateFormatter.date(from: "2018-02-01T22:00:00.000+0000")!.getStartOfDay()
         
         let callEvent11 = CalendarEvents.callEvent(CalendarEventCall(uid: "Call11", dateInterval: DateInterval.init(start: date1, duration: TimeInterval(3600)), channel: CallChannel.email, accountName: "Who", accountId: "Account1", status: OCEDBCallStatus.draft, signature: nil, submissionDate: nil))
-        
+
         let callEvent12 = CalendarEvents.callEvent(CalendarEventCall(uid: "Call12", dateInterval: DateInterval(start: date1.addingTimeInterval(TimeInterval(3600*2)), duration: TimeInterval(3600)), channel: CallChannel.email, accountName: "Pony", accountId: "Account2", status: OCEDBCallStatus.draft, signature: nil, submissionDate: nil))
 
-        let generalEvent11 = CalendarEvents.generalEvent(CalendarGeneralEvent(uid: "GE1", dateInterval: DateInterval(start: date1.addingTimeInterval(TimeInterval(3600*4)), duration: TimeInterval(3600*24*3)), isAllDay: false, name: "General Event1", description: "event description1"))
+        let generalEvent11 = CalendarEvents.generalEvent(CalendarGeneralEvent(uid: "GE1", dateInterval: DateInterval(start: date1.addingTimeInterval(TimeInterval(3600*24*3)), duration: TimeInterval(3600*24*3)), isAllDay: false, name: "General Event1", description: "event description1"))
 
-        let generalEvent12 = CalendarEvents.generalEvent(CalendarGeneralEvent(uid: "GE2", dateInterval: DateInterval(start: date1.addingTimeInterval(TimeInterval(3600*5)), duration: TimeInterval(3600*24*4)), isAllDay: false, name: "General Event2", description: "event description2"))
+        let generalEvent12 = CalendarEvents.generalEvent(CalendarGeneralEvent(uid: "GE2", dateInterval: DateInterval(start: date1.addingTimeInterval(TimeInterval(3600)), duration: TimeInterval(3600*24*4)), isAllDay: false, name: "General Event2", description: "event description2"))
 
 //
 //        let date2 = date1.appendDays(days: 1)!//dateFormatter.date(from: "2018-02-17T10:00:00.000+0000")!.getStartOfDay()
@@ -121,13 +123,13 @@ class DataSource {
     }
     
     func events(in section: Int) -> [CalendarEvents]{
-        return monthSections[section].events.map{$0.event}
+        return monthSections[section].visibleEvents.map{$0.event}
     }
     
     private func composeMonthSections(with calendarEvents: [CalendarEvents]) {
-        var alreadyPlacedIntervales: [[DateInterval]] = [[DateInterval]](repeating: [], count: maxEventsPerDay)
-        var rowIndexInsideWeek: Int?
         for weekInterval in self.symmetricWeeksRange {
+            var rowIndexInsideWeek: Int?
+            var alreadyPlacedIntervales: [[DateInterval]] = [[DateInterval]](repeating: [], count: maxEventsPerDay)
             var monthSection = MonthSection(dateInteval: weekInterval)
             let weekEvents = calendarEvents.filter{ $0.dateInterval.intersects(weekInterval)}
             var sortedWeekEvents = sortEvents(events: weekEvents, inside: weekInterval)
@@ -140,14 +142,16 @@ class DataSource {
                     IteratableDateInterval(weekInterval).forEach{daysInsideWeekInterval.append($0)}
                     let columnNumber: Int
                     let daysDurationInWeek = daysDuration(of: event, in: weekInterval)
-                    if let column = daysInsideWeekInterval.index(of: event.dateInterval.start) {
+                    if let column = daysInsideWeekInterval.index(of: event.dateInterval.start.getStartOfDay(timeZone: timeZone)) {
                         columnNumber = column
                     } else {
                         columnNumber = 0
                     }
                     let monthEventLayout = MonthSectionEventLayout(row: rowIndex, column: columnNumber, duration: daysDurationInWeek)
                     let monthSectionEvent = MonthSectionEvent(event: event, sectionLayout: monthEventLayout)
-                    monthSection.events.append(monthSectionEvent)
+                    monthSection.visibleEvents.append(monthSectionEvent)
+                } else {
+                    monthSection.hidenEvents.append(event)
                 }
             }
             monthSections.append(monthSection)
@@ -167,10 +171,11 @@ class DataSource {
     }
     
     private func daysDuration(of event: CalendarEvents, in weekInterval: DateInterval) -> Int {
-        let endEventDate = event.dateInterval.end.getEndOfDay()!
+        guard let endEventDate = event.dateInterval.end.getEndOfDay(timeZone: timeZone) else { return 0 }
         var count = 0
         let minimalDaysDuration = 1
-        IteratableDateInterval(DateInterval(start: weekInterval.start, end: endEventDate), Calendar.Component.day, Calendar.current).forEach {_ in
+        let eventBeginning = max(event.dateInterval.start.getStartOfDay(timeZone: timeZone), weekInterval.start)
+        IteratableDateInterval(DateInterval(start: eventBeginning, end: endEventDate), .day, calendar).forEach {_ in
             count += 1
         }
         return max(count,minimalDaysDuration)

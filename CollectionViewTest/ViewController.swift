@@ -34,12 +34,12 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataSource.monthSections[section].events.count
+        return dataSource.monthSections[section].visibleEvents.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CalendarMonthEventViewCell", for: indexPath) as! CalendarMonthEventViewCell
-        let eventType = dataSource.monthSections[indexPath.section].events[indexPath.row].event
+        let eventType = dataSource.monthSections[indexPath.section].visibleEvents[indexPath.row].event
         let title: String
         switch eventType {
             case .callEvent(let call):
@@ -64,7 +64,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
 //
 extension ViewController: CalendarMonthViewCustomLayoutDataSource {
     func layoutParams(for indexPath: IndexPath) -> MonthSectionEventLayout {
-        return dataSource.monthSections[indexPath.section].events[indexPath.row].sectionLayout
+        return dataSource.monthSections[indexPath.section].visibleEvents[indexPath.row].sectionLayout
     }
 //    func doesCellPlacedEarlier(cellIndexPath: IndexPath) -> Bool {
 //        let eventStartDateBeginning = dateInterval(by: cellIndexPath).start.getStartOfDay()
