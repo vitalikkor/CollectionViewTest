@@ -41,13 +41,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "CollectionViewTest/ViewController.swift"
-            timestampString = "542889720.8672791"
+            filePath = "CollectionViewTest/CalendarMonthViewCustomLayout.swift"
+            timestampString = "543257990.122492"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "79"
-            endingLineNumber = "79"
-            landmarkName = "daysDurationCell(with:)"
+            startingLineNumber = "180"
+            endingLineNumber = "180"
+            landmarkName = "fillSeparatorsAttributes()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -57,14 +57,14 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "CollectionViewTest/CalendarMonthViewCustomLayout.swift"
-            timestampString = "542889720.867364"
+            filePath = "CollectionViewTest/ViewController.swift"
+            timestampString = "543257990.122864"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "48"
-            endingLineNumber = "48"
-            landmarkName = "maxVisibleCellPerSection"
-            landmarkType = "24">
+            startingLineNumber = "67"
+            endingLineNumber = "67"
+            landmarkName = "layoutParams(for:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -73,14 +73,14 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "CollectionViewTest/Stub/DataSource.swift"
-            timestampString = "542889720.867427"
+            filePath = "CollectionViewTest/CalendarMonthSupplementaryView.swift"
+            timestampString = "543257990.122923"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "84"
-            endingLineNumber = "84"
-            landmarkName = "eventsDays"
-            landmarkType = "24">
+            startingLineNumber = "96"
+            endingLineNumber = "96"
+            landmarkName = "initialSetup()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

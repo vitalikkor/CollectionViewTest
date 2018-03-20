@@ -23,7 +23,6 @@
 		B95CFBA22057FA730009512B /* CalendarMonthSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95CFBA12057FA730009512B /* CalendarMonthSupplementaryView.swift */; };
 		B95CFBA42057FB4E0009512B /* CalendarMonthDecoratorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95CFBA32057FB4E0009512B /* CalendarMonthDecoratorView.swift */; };
 		B95CFBA62057FBB20009512B /* CalendarMonthDecoratorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B95CFBA52057FBB20009512B /* CalendarMonthDecoratorView.xib */; };
-		B95CFBA82057FC200009512B /* CalendarMonthSupplementaryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B95CFBA72057FC200009512B /* CalendarMonthSupplementaryView.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,7 +44,6 @@
 		B95CFBA12057FA730009512B /* CalendarMonthSupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarMonthSupplementaryView.swift; sourceTree = "<group>"; };
 		B95CFBA32057FB4E0009512B /* CalendarMonthDecoratorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarMonthDecoratorView.swift; sourceTree = "<group>"; };
 		B95CFBA52057FBB20009512B /* CalendarMonthDecoratorView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CalendarMonthDecoratorView.xib; sourceTree = "<group>"; };
-		B95CFBA72057FC200009512B /* CalendarMonthSupplementaryView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CalendarMonthSupplementaryView.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,7 +97,6 @@
 				B95C71E4205966D10057A32C /* Stub */,
 				B95CFBA12057FA730009512B /* CalendarMonthSupplementaryView.swift */,
 				B95CFBA32057FB4E0009512B /* CalendarMonthDecoratorView.swift */,
-				B95CFBA72057FC200009512B /* CalendarMonthSupplementaryView.xib */,
 				B95CFBA52057FBB20009512B /* CalendarMonthDecoratorView.xib */,
 				B95CFB922057F9110009512B /* Assets.xcassets */,
 				B95CFB942057F9110009512B /* LaunchScreen.storyboard */,
@@ -170,7 +167,6 @@
 				B95CFBA62057FBB20009512B /* CalendarMonthDecoratorView.xib in Resources */,
 				B95CFB962057F9110009512B /* LaunchScreen.storyboard in Resources */,
 				B95CFB932057F9110009512B /* Assets.xcassets in Resources */,
-				B95CFBA82057FC200009512B /* CalendarMonthSupplementaryView.xib in Resources */,
 				B95CFB912057F9110009512B /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
