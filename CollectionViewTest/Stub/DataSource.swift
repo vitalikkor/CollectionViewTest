@@ -12,11 +12,11 @@ import UIKit
 struct MonthSection {
     let dateInteval: DateInterval
     var visibleEvents: [MonthSectionEvent]
-    var hidenEvents: [CalendarEvents]
+    var hiddenEvents: [Date:[CalendarEvents]]
     
     init(dateInteval: DateInterval){
         visibleEvents = []
-        hidenEvents = []
+        hiddenEvents = [:]
         self.dateInteval = dateInteval
     }
 }
@@ -79,12 +79,14 @@ class DataSource {
         let callEvent21 = CalendarEvents.callEvent(CalendarEventCall(uid: "Call21", dateInterval: DateInterval(start: date2.addingTimeInterval(TimeInterval(3600*1)), duration: TimeInterval(3600*24*2)), channel: CallChannel.email, accountName: "Sort", accountId: "Account21", status: OCEDBCallStatus.draft, signature: nil, submissionDate: nil))
 
         let callEvent22 = CalendarEvents.callEvent(CalendarEventCall(uid: "Call22", dateInterval: DateInterval(start: date2.addingTimeInterval(TimeInterval(3600*2)), duration: TimeInterval(3600)), channel: CallChannel.email, accountName: "Typo", accountId: "Account22", status: OCEDBCallStatus.draft, signature: nil, submissionDate: nil))
+        
+         let callEvent23 = CalendarEvents.callEvent(CalendarEventCall(uid: "Call22", dateInterval: DateInterval(start: date2.addingTimeInterval(TimeInterval(3600*1)), duration: TimeInterval(3600)), channel: CallChannel.email, accountName: "Hidden", accountId: "Account22", status: OCEDBCallStatus.draft, signature: nil, submissionDate: nil))
 //
 //        let date3 = date2.appendDays(days: 1)!
 //
 //        let totEvent31 = CalendarEvents.totEvent(CalendarTOTEvent(uid: "TOT31", dateInterval: DateInterval(start: date3.addingTimeInterval(TimeInterval(3600*2)), duration: TimeInterval(3600)), name: "tot-t", spanType: SnapType.hours, timeOff: "String", type: "String"))
         
-        return [callEvent11,callEvent12,/* generalEvent11, generalEvent12,*/ callEvent21, callEvent22/*, totEvent31*/]
+        return [callEvent11,callEvent12,/* generalEvent11, generalEvent12,*/ callEvent21, callEvent22, callEvent23/*, totEvent31*/]
     }()
     
     private lazy var symmetricWeeksRange: [DateInterval] = {
@@ -163,7 +165,20 @@ class DataSource {
                     let monthSectionEvent = MonthSectionEvent(event: event, sectionLayout: monthEventLayout)
                     monthSection.visibleEvents.append(monthSectionEvent)
                 } else {
-                    monthSection.hidenEvents.append(event)
+                    //fill hidden events array with appropriate date
+                    if let intersectionInterval = weekInterval.intersection(with: event.dateInterval), intersectionInterval.duration > 0,
+                        let ending = intersectionInterval.end.getEndOfDay(timeZone: timeZone)?.addingTimeInterval(1) {
+                        let beginning = intersectionInterval.start.getStartOfDay(timeZone: timeZone)
+                        IteratableDateInterval(DateInterval(start: beginning, end: ending)).forEach{ date in
+                            let beginnigDate = date.getStartOfDay(timeZone: timeZone)
+                            if monthSection.hiddenEvents[beginnigDate] != nil {
+                                monthSection.hiddenEvents[beginnigDate]?.append(event)
+                            } else {
+                                monthSection.hiddenEvents[beginnigDate] = [event]
+                            }
+                        }
+                    }
+                    
                 }
             }
             monthSections.append(monthSection)

@@ -11,6 +11,7 @@ import UIKit
 
 protocol CalendarMonthOneDayViewDelegate: class {
     func dayDidTap(view: UIView, date: Date)
+    func moreItemsDidTap(view: UIView, date: Date)
 }
 
 class CalendarMonthOneDayView: UIView {
@@ -23,6 +24,17 @@ class CalendarMonthOneDayView: UIView {
         super.init(coder: aDecoder)
         initialSetup()
     }
+    
+    private lazy var moereItemsLabel: UILabel = {
+        let label = UILabel(frame: self.frame)
+        label.textColor = UIColor.blue
+        label.font = UIFont.systemFont(ofSize: 10)
+        label.text = "more..."
+        label.textAlignment = .center
+        label.isUserInteractionEnabled = true
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel(frame: self.frame)
@@ -54,7 +66,12 @@ class CalendarMonthOneDayView: UIView {
     private(set) var dateFormatter: DateFormatter?
     private(set) var date: Date?
     
-    func setupData(date: Date, dateformatter: DateFormatter) {
+    func setupData(date: Date, dateformatter: DateFormatter, numberOfHiddenItems: Int) {
+        if numberOfHiddenItems > 0 {
+            moereItemsLabel.isHidden = false
+        } else {
+            moereItemsLabel.isHidden = true
+        }
         titleLabel.text = dateformatter.string(from: date)
         self.date = date
     }
@@ -65,13 +82,24 @@ class CalendarMonthOneDayView: UIView {
         titleLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 10).isActive = true
         titleLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10).isActive = true
         titleLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 50).isActive = true
-        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector( didTap(recognizer:)))
-        self.addGestureRecognizer(gestureRecognizer)
+        self.addGestureRecognizer( UITapGestureRecognizer(target: self, action: #selector( didTap(recognizer:))))
+        self.addSubview(moereItemsLabel)
+        let margingGuide = self.layoutMarginsGuide
+        moereItemsLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
+        moereItemsLabel.leadingAnchor.constraint(equalTo: margingGuide.leadingAnchor).isActive = true
+        moereItemsLabel.trailingAnchor.constraint(equalTo: margingGuide.trailingAnchor).isActive = true
+        moereItemsLabel.heightAnchor.constraint(equalToConstant: 25).isActive = true
+        moereItemsLabel.isHidden = true
+        moereItemsLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector( didTap(recognizer:))))
     }
     
     @objc private func didTap(recognizer: UITapGestureRecognizer) {
-        if let recognizerView = recognizer.view, let date = self.date {
+        guard let recognizerView = recognizer.view, let date = self.date else { return }
+        if recognizer.view == moereItemsLabel {
+            delegate?.moreItemsDidTap(view: recognizerView, date: date)
+        } else if recognizer.view == self {
             delegate?.dayDidTap(view: recognizerView, date: date)
         }
+        
     }
 }

@@ -59,7 +59,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         let dateInterval = dataSource.monthSections[indexPath.section].dateInteval
         let dateFormatter = dataSource.monthDateFormatter
         let selectedMonth = dataSource.selectedMonth
-        supplementaryView.update(with: dateInterval, selectedMonthInterval:selectedMonth, dateFormatter: dateFormatter)
+        let hidenItems = dataSource.monthSections[indexPath.section].hiddenEvents.mapValues{$0.count}
+        supplementaryView.update(with: dateInterval, selectedMonthInterval:selectedMonth, dateFormatter: dateFormatter, numberOfHidenItemsPerDay: hidenItems)
         supplementaryView.delegate = self
         return supplementaryView
     }
@@ -78,10 +79,13 @@ extension ViewController: CalendarMonthViewCustomLayoutDataSource {
 }
 
 extension ViewController: CalendarMonthSupplementaryViewDelegate {
-    func dayDidTap(date: Date) {
+    func dayDidTap(sectionIndex: Int, view: UIView, date: Date) {
         
     }
     
-    
+    func moreItemsDidTap(sectionIndex: Int, view: UIView, date: Date) {
+        
+    }
+
 }
 
