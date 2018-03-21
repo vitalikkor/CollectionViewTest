@@ -34,7 +34,7 @@ class CalendarMonthEventViewCell: UICollectionViewCell {
         let margins = self.layoutMarginsGuide
         titleLabel.centerYAnchor.constraint(equalTo: margins.centerYAnchor).isActive = true
         titleLabel.trailingAnchor.constraint(equalTo: margins.trailingAnchor).isActive = true
-        self.backgroundColor = UIColor.yellow
+        self.backgroundColor = UIColor.cyan
     }
     
     

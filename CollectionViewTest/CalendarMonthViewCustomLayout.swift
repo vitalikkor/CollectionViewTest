@@ -37,7 +37,9 @@ class CalendarMonthViewCustomLayout: UICollectionViewLayout {
     let separatorLineWidth: CGFloat = 0.6
     let cellHeight: CGFloat = 25
     let verticalCellsDistance: CGFloat = 2
-    let cellsInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
+
+    private let cellsLeftInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 0)
+    private let cellsRightInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 5)
     let cellsTopOffset: CGFloat = 40
     var columnWidth: CGFloat {
         return (collectionView?.frame.width ?? 0)/CGFloat(totalColumnsCount)
@@ -147,14 +149,36 @@ class CalendarMonthViewCustomLayout: UICollectionViewLayout {
             let indexPath = IndexPath(item: i, section: section)
             let layoutParams = dataSource.layoutParams(for: indexPath)
             let cellAttributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
-            let origin = CGPoint(x: CGFloat(layoutParams.column)*columnWidth, y:
+            let columnNumber = CGFloat(layoutParams.column)
+            let origin = CGPoint(x: max(0, columnNumber)*columnWidth, y:
                 CGFloat(layoutParams.row)*(cellHeight+verticalCellsDistance)+cellsTopOffset+CGFloat(section)*sectionSize.height)
             let size = CGSize(width: CGFloat(layoutParams.duration)*columnWidth, height: cellHeight)
-            let frame = UIEdgeInsetsInsetRect(CGRect(origin: origin, size: size), cellsInset)
-            cellAttributes.frame = frame
+            var frame = CGRect(origin: origin, size: size)
+            clipToBounds(frame: &frame, bounds: collectionView.bounds)
+            cellAttributes.frame = applyCellInsets(with: frame, layoutParams: layoutParams)
             cellAttributes.zIndex = Zindex.cellView
             cashedAttributs[Element.cellView]?[indexPath] = cellAttributes
         }
+    }
+    
+    private func clipToBounds(frame: inout CGRect, bounds: CGRect) {
+        if frame.minX < 0 {
+            frame.origin.x = 0
+        }
+        if frame.maxX > bounds.size.width {
+            frame.size.width = bounds.size.width - frame.origin.x
+        }
+    }
+    
+    private func applyCellInsets(with frame: CGRect, layoutParams: MonthSectionEventLayout) -> CGRect {
+        var resultFrame = frame
+        if layoutParams.column >= 0 {
+            resultFrame = UIEdgeInsetsInsetRect(resultFrame, cellsLeftInset)
+        }
+        if max(0, layoutParams.column) + layoutParams.duration <= columnsCountPerScreen {
+            resultFrame = UIEdgeInsetsInsetRect(resultFrame, cellsRightInset)
+        }
+        return resultFrame
     }
 
     private func fillSeparatorsAttributes(){

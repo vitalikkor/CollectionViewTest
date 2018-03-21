@@ -33,13 +33,7 @@ struct MonthSectionEventLayout {
 }
 
 class DataSource {
-    
-    lazy var dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-        return formatter
-    }()
-    
+
     lazy var monthFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "MMM dd"
@@ -48,13 +42,16 @@ class DataSource {
     
     lazy var calendar: Calendar = {
         var cal = Calendar.current
-        cal.timeZone = self.timeZone
+        cal.timeZone = .current
+        cal.firstWeekday = 1
         return cal
     }()
     
-    let timeZone = TimeZone.current
+    lazy var timeZone: TimeZone = {
+        return calendar.timeZone
+    }()
     
-    let daysCountInWeek = 7
+
     let maxEventsPerDay = 3
     
     lazy var currentDate: Date = {
@@ -62,33 +59,34 @@ class DataSource {
     }()
     
     private lazy var events: [CalendarEvents] = {
-        let date1 = dateFormatter.date(from: "2018-02-01T22:00:00.000+0000")!.getStartOfDay()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
         
-        let callEvent11 = CalendarEvents.callEvent(CalendarEventCall(uid: "Call11", dateInterval: DateInterval.init(start: date1, duration: TimeInterval(3600)), channel: CallChannel.email, accountName: "Who", accountId: "Account1", status: OCEDBCallStatus.draft, signature: nil, submissionDate: nil))
+        let date1 = dateFormatter.date(from: "2018-02-03T22:00:00.000+0000")!//.getStartOfDay()
 
-        let callEvent12 = CalendarEvents.callEvent(CalendarEventCall(uid: "Call12", dateInterval: DateInterval(start: date1.addingTimeInterval(TimeInterval(3600*2)), duration: TimeInterval(3600)), channel: CallChannel.email, accountName: "Pony", accountId: "Account2", status: OCEDBCallStatus.draft, signature: nil, submissionDate: nil))
+        let callEvent11 = CalendarEvents.callEvent(CalendarEventCall(uid: "Call11", dateInterval: DateInterval(start: date1, duration: TimeInterval(3600*5)), channel: CallChannel.email, accountName: "Who", accountId: "Account1", status: OCEDBCallStatus.draft, signature: nil, submissionDate: nil))
 
-        let generalEvent11 = CalendarEvents.generalEvent(CalendarGeneralEvent(uid: "GE1", dateInterval: DateInterval(start: date1.addingTimeInterval(TimeInterval(3600*24*3)), duration: TimeInterval(3600*24*3)), isAllDay: false, name: "General Event1", description: "event description1"))
+        let callEvent12 = CalendarEvents.callEvent(CalendarEventCall(uid: "Call12", dateInterval: DateInterval(start: date1.addingTimeInterval(TimeInterval(3600*0)), duration: TimeInterval(3600*24*2)), channel: CallChannel.email, accountName: "Pony", accountId: "Account2", status: OCEDBCallStatus.draft, signature: nil, submissionDate: nil))
 
-        let generalEvent12 = CalendarEvents.generalEvent(CalendarGeneralEvent(uid: "GE2", dateInterval: DateInterval(start: date1.addingTimeInterval(TimeInterval(3600)), duration: TimeInterval(3600*24*4)), isAllDay: false, name: "General Event2", description: "event description2"))
-
+//        let generalEvent11 = CalendarEvents.generalEvent(CalendarGeneralEvent(uid: "GE1", dateInterval: DateInterval(start: date1.addingTimeInterval(TimeInterval(3600*24*3)), duration: TimeInterval(3600*24*3)), isAllDay: false, name: "General Event1", description: "event description1"))
 //
-//        let date2 = date1.appendDays(days: 1)!//dateFormatter.date(from: "2018-02-17T10:00:00.000+0000")!.getStartOfDay()
-//
-//        let callEvent21 = CalendarEvents.callEvent(CalendarEventCall(uid: "Call21", dateInterval: DateInterval(start: date2.addingTimeInterval(TimeInterval(3600*2)), duration: TimeInterval(3600)), channel: CallChannel.email, accountName: "Sort", accountId: "Account21", status: OCEDBCallStatus.draft, signature: nil, submissionDate: nil))
-//
-//        let callEvent22 = CalendarEvents.callEvent(CalendarEventCall(uid: "Call22", dateInterval: DateInterval(start: date2.addingTimeInterval(TimeInterval(3600*2)), duration: TimeInterval(3600)), channel: CallChannel.email, accountName: "Typo", accountId: "Account22", status: OCEDBCallStatus.draft, signature: nil, submissionDate: nil))
+//        let generalEvent12 = CalendarEvents.generalEvent(CalendarGeneralEvent(uid: "GE2", dateInterval: DateInterval(start: date1.addingTimeInterval(TimeInterval(3600)), duration: TimeInterval(3600*24*4)), isAllDay: false, name: "General Event2", description: "event description2"))
+
+
+        let date2 = dateFormatter.date(from: "2018-02-05T22:00:00.000+0000")!.getStartOfDay()
+
+        let callEvent21 = CalendarEvents.callEvent(CalendarEventCall(uid: "Call21", dateInterval: DateInterval(start: date2.addingTimeInterval(TimeInterval(3600*1)), duration: TimeInterval(3600*24*2)), channel: CallChannel.email, accountName: "Sort", accountId: "Account21", status: OCEDBCallStatus.draft, signature: nil, submissionDate: nil))
+
+        let callEvent22 = CalendarEvents.callEvent(CalendarEventCall(uid: "Call22", dateInterval: DateInterval(start: date2.addingTimeInterval(TimeInterval(3600*2)), duration: TimeInterval(3600)), channel: CallChannel.email, accountName: "Typo", accountId: "Account22", status: OCEDBCallStatus.draft, signature: nil, submissionDate: nil))
 //
 //        let date3 = date2.appendDays(days: 1)!
 //
 //        let totEvent31 = CalendarEvents.totEvent(CalendarTOTEvent(uid: "TOT31", dateInterval: DateInterval(start: date3.addingTimeInterval(TimeInterval(3600*2)), duration: TimeInterval(3600)), name: "tot-t", spanType: SnapType.hours, timeOff: "String", type: "String"))
         
-        return [callEvent11,callEvent12, generalEvent11, generalEvent12/*, callEvent21, callEvent22, totEvent31*/]
+        return [callEvent11,callEvent12,/* generalEvent11, generalEvent12,*/ callEvent21, callEvent22/*, totEvent31*/]
     }()
     
     private lazy var symmetricWeeksRange: [DateInterval] = {
-        var calendar = Calendar.current
-        calendar.firstWeekday = 2
         guard let currentWeek = calendar.dateInterval(of: Calendar.Component.weekOfYear, for: currentDate) else { return [] }
         var weeksArray: [DateInterval] = [currentWeek]
         for i in 1...7 {
@@ -131,7 +129,12 @@ class DataSource {
             var rowIndexInsideWeek: Int?
             var alreadyPlacedIntervales: [[DateInterval]] = [[DateInterval]](repeating: [], count: maxEventsPerDay)
             var monthSection = MonthSection(dateInteval: weekInterval)
-            let weekEvents = calendarEvents.filter{ $0.dateInterval.intersects(weekInterval)}
+            let weekEvents = calendarEvents.filter{ event in
+                if let intersection = event.dateInterval.intersection(with: weekInterval) {
+                    return intersection.duration > 0
+                }
+                return false
+            }
             var sortedWeekEvents = sortEvents(events: weekEvents, inside: weekInterval)
             while sortedWeekEvents.count > 0 {
                 let event = sortedWeekEvents.removeFirst()
@@ -140,12 +143,12 @@ class DataSource {
                 if let rowIndex = rowIndexInsideWeek {
                     var daysInsideWeekInterval = [Date]()
                     IteratableDateInterval(weekInterval).forEach{daysInsideWeekInterval.append($0)}
-                    let columnNumber: Int
+                    var columnNumber: Int
                     let daysDurationInWeek = daysDuration(of: event, in: weekInterval)
                     if let column = daysInsideWeekInterval.index(of: event.dateInterval.start.getStartOfDay(timeZone: timeZone)) {
                         columnNumber = column
                     } else {
-                        columnNumber = 0
+                        columnNumber = -1
                     }
                     let monthEventLayout = MonthSectionEventLayout(row: rowIndex, column: columnNumber, duration: daysDurationInWeek)
                     let monthSectionEvent = MonthSectionEvent(event: event, sectionLayout: monthEventLayout)
@@ -171,7 +174,8 @@ class DataSource {
     }
     
     private func daysDuration(of event: CalendarEvents, in weekInterval: DateInterval) -> Int {
-        guard let endEventDate = event.dateInterval.end.getEndOfDay(timeZone: timeZone) else { return 0 }
+        let beginingOfEndEventDate = event.dateInterval.end.getStartOfDay(timeZone: timeZone)
+        guard let endEventDate = calendar.date(byAdding: .day, value: 1, to: beginingOfEndEventDate) else { return 0 }
         var count = 0
         let minimalDaysDuration = 1
         let eventBeginning = max(event.dateInterval.start.getStartOfDay(timeZone: timeZone), weekInterval.start)
