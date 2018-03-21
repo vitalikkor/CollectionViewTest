@@ -21,15 +21,15 @@ class CalendarMonthEventViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setup()
+        initialSetup()
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        setup()
+        initialSetup()
     }
     
-    private func setup() {
+    private func initialSetup() {
         self.addSubview(titleLabel)
         let margins = self.layoutMarginsGuide
         titleLabel.centerYAnchor.constraint(equalTo: margins.centerYAnchor).isActive = true

@@ -22,7 +22,7 @@
 		B95CFBA02057FA060009512B /* CalendarMonthEventViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95CFB9F2057FA060009512B /* CalendarMonthEventViewCell.swift */; };
 		B95CFBA22057FA730009512B /* CalendarMonthSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95CFBA12057FA730009512B /* CalendarMonthSupplementaryView.swift */; };
 		B95CFBA42057FB4E0009512B /* CalendarMonthDecoratorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95CFBA32057FB4E0009512B /* CalendarMonthDecoratorView.swift */; };
-		B95CFBA62057FBB20009512B /* CalendarMonthDecoratorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B95CFBA52057FBB20009512B /* CalendarMonthDecoratorView.xib */; };
+		B9658EF32062BE7800DE8587 /* CalendarMonthOneDayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9658EF22062BE7800DE8587 /* CalendarMonthOneDayView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,7 +43,7 @@
 		B95CFB9F2057FA060009512B /* CalendarMonthEventViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarMonthEventViewCell.swift; sourceTree = "<group>"; };
 		B95CFBA12057FA730009512B /* CalendarMonthSupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarMonthSupplementaryView.swift; sourceTree = "<group>"; };
 		B95CFBA32057FB4E0009512B /* CalendarMonthDecoratorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarMonthDecoratorView.swift; sourceTree = "<group>"; };
-		B95CFBA52057FBB20009512B /* CalendarMonthDecoratorView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CalendarMonthDecoratorView.xib; sourceTree = "<group>"; };
+		B9658EF22062BE7800DE8587 /* CalendarMonthOneDayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarMonthOneDayView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,8 +96,8 @@
 				B95C71E0205965570057A32C /* CalendarEventDay.swift */,
 				B95C71E4205966D10057A32C /* Stub */,
 				B95CFBA12057FA730009512B /* CalendarMonthSupplementaryView.swift */,
+				B9658EF22062BE7800DE8587 /* CalendarMonthOneDayView.swift */,
 				B95CFBA32057FB4E0009512B /* CalendarMonthDecoratorView.swift */,
-				B95CFBA52057FBB20009512B /* CalendarMonthDecoratorView.xib */,
 				B95CFB922057F9110009512B /* Assets.xcassets */,
 				B95CFB942057F9110009512B /* LaunchScreen.storyboard */,
 				B95CFB972057F9110009512B /* Info.plist */,
@@ -164,7 +164,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B95CFBA62057FBB20009512B /* CalendarMonthDecoratorView.xib in Resources */,
 				B95CFB962057F9110009512B /* LaunchScreen.storyboard in Resources */,
 				B95CFB932057F9110009512B /* Assets.xcassets in Resources */,
 				B95CFB912057F9110009512B /* Main.storyboard in Resources */,
@@ -186,6 +185,7 @@
 				B95CFBA22057FA730009512B /* CalendarMonthSupplementaryView.swift in Sources */,
 				B95CFBA02057FA060009512B /* CalendarMonthEventViewCell.swift in Sources */,
 				B95CFB8C2057F9110009512B /* AppDelegate.swift in Sources */,
+				B9658EF32062BE7800DE8587 /* CalendarMonthOneDayView.swift in Sources */,
 				B95C71E6205967170057A32C /* GeneralEventStaff.swift in Sources */,
 				B95C71EA20596D8A0057A32C /* DataSource.swift in Sources */,
 				B95C71E8205967410057A32C /* TotEventStaff.swift in Sources */,

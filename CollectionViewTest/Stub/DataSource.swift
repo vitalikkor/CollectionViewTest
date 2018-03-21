@@ -28,22 +28,23 @@ struct MonthSectionEvent {
 
 struct MonthSectionEventLayout {
     let row: Int
-    let column: Int
+    //possible indexes -1...n
+    let column: Int//if column equal -1 it means that event have been started on previous week(section)
     let duration: Int
 }
 
 class DataSource {
 
-    lazy var monthFormatter: DateFormatter = {
+    lazy var monthDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "MMM dd"
+        formatter.dateFormat = "MMM d"
         return formatter
     }()
     
     lazy var calendar: Calendar = {
         var cal = Calendar.current
         cal.timeZone = .current
-        cal.firstWeekday = 1
+        cal.firstWeekday = 2
         return cal
     }()
     
@@ -124,6 +125,13 @@ class DataSource {
         return monthSections[section].visibleEvents.map{$0.event}
     }
     
+    var selectedMonth: DateInterval {
+        guard let startMonth = self.currentDate.startOfMonth(timeZone: calendar.timeZone), let endMonth = self.currentDate.endOfMonth(timeZone: calendar.timeZone)?.addingTimeInterval(-1) else {
+            return DateInterval()
+        }
+        return DateInterval(start: startMonth, end: endMonth)
+    }
+    
     private func composeMonthSections(with calendarEvents: [CalendarEvents]) {
         for weekInterval in self.symmetricWeeksRange {
             var rowIndexInsideWeek: Int?
@@ -138,8 +146,9 @@ class DataSource {
             var sortedWeekEvents = sortEvents(events: weekEvents, inside: weekInterval)
             while sortedWeekEvents.count > 0 {
                 let event = sortedWeekEvents.removeFirst()
-                let allDayInterval = DateInterval(start: event.dateInterval.start.getStartOfDay(timeZone: timeZone), end: event.dateInterval.end.getEndOfDay(timeZone: timeZone)!)
-                rowIndexInsideWeek = self.findeIndexRowToPlace(dateInterval: allDayInterval, placedIntervales: &alreadyPlacedIntervales, maxRowIndex: maxEventsPerDay)
+                guard let endDayOfEventEnd = event.dateInterval.end.getEndOfDay(timeZone: timeZone) else { fatalError()}
+                let fullEventDayInterval = DateInterval(start: event.dateInterval.start.getStartOfDay(timeZone: timeZone), end: endDayOfEventEnd)
+                rowIndexInsideWeek = self.findeIndexRowToPlace(dateInterval: fullEventDayInterval, placedIntervales: &alreadyPlacedIntervales, maxRowIndex: maxEventsPerDay)
                 if let rowIndex = rowIndexInsideWeek {
                     var daysInsideWeekInterval = [Date]()
                     IteratableDateInterval(weekInterval).forEach{daysInsideWeekInterval.append($0)}

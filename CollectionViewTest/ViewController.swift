@@ -19,6 +19,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         collectionView.register(CalendarMonthSupplementaryView.self, forSupplementaryViewOfKind:  CalendarMonthViewCustomLayout.Element.supplementaryView.kind, withReuseIdentifier: "SupplementaryCell")
         let customLayout = CalendarMonthViewCustomLayout()
         customLayout.dataSource = self
+        collectionView.showsVerticalScrollIndicator = false
         collectionView.collectionViewLayout = customLayout
         collectionView.reloadData()
     }
@@ -55,46 +56,32 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let supplementaryView = collectionView.dequeueReusableSupplementaryView(ofKind: CalendarMonthViewCustomLayout.Element.supplementaryView.kind, withReuseIdentifier: "SupplementaryCell", for: indexPath) as! CalendarMonthSupplementaryView
-        supplementaryView.dateInterval = dataSource.monthSections[indexPath.section].dateInteval
-        supplementaryView.dateFormatter = dataSource.monthFormatter
+        let dateInterval = dataSource.monthSections[indexPath.section].dateInteval
+        let dateFormatter = dataSource.monthDateFormatter
+        let selectedMonth = dataSource.selectedMonth
+        supplementaryView.update(with: dateInterval, selectedMonthInterval:selectedMonth, dateFormatter: dateFormatter)
+        supplementaryView.delegate = self
         return supplementaryView
     }
 
 }
 //
 extension ViewController: CalendarMonthViewCustomLayoutDataSource {
+    
+    var maxItemsInSectionsPerColumn: Int {
+        return dataSource.maxEventsPerDay
+    }
+    
     func layoutParams(for indexPath: IndexPath) -> MonthSectionEventLayout {
         return dataSource.monthSections[indexPath.section].visibleEvents[indexPath.row].sectionLayout
     }
-//    func doesCellPlacedEarlier(cellIndexPath: IndexPath) -> Bool {
-//        let eventStartDateBeginning = dateInterval(by: cellIndexPath).start.getStartOfDay()
-//        let currentCellDate = dataSource.threeMonthsdateRange[cellIndexPath.section]
-//        return eventStartDateBeginning < currentCellDate
-//    }
-//
-//    func daysDurationCell(with indexPath: IndexPath) -> Int {
-//        let currentSectionDate = dataSource.threeMonthsdateRange[indexPath.section]
-//        let endEventDate = dateInterval(by: indexPath).end.getEndOfDay()!
-//        var count = 0
-//        var minimalDaysDuration = 1
-//        IteratableDateInterval(DateInterval(start: currentSectionDate, end: endEventDate), Calendar.Component.day, Calendar.current).forEach {_ in
-//            count += 1
-//        }
-//        return max(count,minimalDaysDuration)
-//    }
-//
-//    func dateInterval(by indexPath: IndexPath) -> DateInterval {
-//        let event = dataSource.eventsInSection(indexPath.section)[indexPath.row]
-//        switch event {
-//            case .callEvent(let call):
-//                return call.dateInterval
-//            case .generalEvent(let generalEvent):
-//                return generalEvent.dateInterval
-//            case .totEvent(let totEvent):
-//                return totEvent.dateInterval
-//        }
-//    }
+}
 
+extension ViewController: CalendarMonthSupplementaryViewDelegate {
+    func dayDidTap(date: Date) {
+        
+    }
+    
     
 }
 

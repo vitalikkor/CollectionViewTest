@@ -8,51 +8,8 @@
 
 import UIKit
 
-class OneDayView: UIView {
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        initialSetup()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        initialSetup()
-    }
-    
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel(frame: self.frame)
-        label.textColor = UIColor.black
-        label.font = UIFont.italicSystemFont(ofSize: 10)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    var dateString: String = "" {
-        didSet {
-            titleLabel.text = dateString
-        }
-    }
-    
-    init(dateString: String, frame: CGRect = .zero) {
-        super.init(frame: frame)
-        self.dateString = dateString
-        initialSetup()
-    }
-    
-    private func initialSetup() {
-        titleLabel.removeFromSuperview()
-        titleLabel.text = dateString
-        self.addSubview(titleLabel)
-        titleLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 10).isActive = true
-        titleLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10).isActive = true
-        titleLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 50).isActive = true
-        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector( didTap(recognizer:)))
-        self.addGestureRecognizer(gestureRecognizer)
-    }
-    
-    @objc private func didTap(recognizer: UITapGestureRecognizer) {
-        
-    }
+protocol CalendarMonthSupplementaryViewDelegate: class {
+    func dayDidTap(date: Date)
 }
 
 class CalendarMonthSupplementaryView: UICollectionReusableView {
@@ -69,17 +26,10 @@ class CalendarMonthSupplementaryView: UICollectionReusableView {
        super.init(coder: aDecoder)
     }
     
-    var dateInterval: DateInterval = DateInterval() {
-        didSet {
-            initialSetup()
-        }
-    }
+    private(set) var dateInterval: DateInterval?
+    private(set) var dateFormatter: DateFormatter?
+    private(set) var selectedMonthInterval: DateInterval?
     
-    var dateFormatter: DateFormatter = DateFormatter() {
-        didSet {
-            initialSetup()
-        }
-    }
     private lazy var weekStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -87,10 +37,14 @@ class CalendarMonthSupplementaryView: UICollectionReusableView {
         stackView.alignment = .fill
         return stackView
     }()
-    private(set) var dayViews: [OneDayView] = []
+    private(set) var dayViews: [CalendarMonthOneDayView] = []
     
-    
+    weak var delegate: CalendarMonthSupplementaryViewDelegate?
     private func initialSetup() {
+        guard let dateInterval = self.dateInterval,
+            let selectedMonthInterval = self.selectedMonthInterval,
+            let dateFormatter = self.dateFormatter
+            else { return }
         var daysInsideWeekInterval = [Date]()
         weekStackView.arrangedSubviews.forEach{$0.removeFromSuperview()}
         dayViews.removeAll()
@@ -102,16 +56,27 @@ class CalendarMonthSupplementaryView: UICollectionReusableView {
         IteratableDateInterval(dateInterval).forEach{ daysInsideWeekInterval.append($0)}
         daysInsideWeekInterval.sort{$0<$1}
         daysInsideWeekInterval.enumerated().forEach { (index, date) in
-            let oneDayView = OneDayView(dateString: dateFormatter.string(from: date))
+            let oneDayView = CalendarMonthOneDayView()
+            oneDayView.doesInsideSelectedMonth = selectedMonthInterval.contains(date)
+            oneDayView.doesCurrentDate = date == Date().getStartOfDay(timeZone: dateFormatter.timeZone)
+            oneDayView.setupData(date: date, dateformatter: dateFormatter)
+            oneDayView.delegate = self
             oneDayView.translatesAutoresizingMaskIntoConstraints = false
             weekStackView.addArrangedSubview(oneDayView)
         }
     }
     
-    private func update() {
-        
+    func update(with dateInterval: DateInterval, selectedMonthInterval: DateInterval, dateFormatter: DateFormatter) {
+        self.dateInterval = dateInterval
+        self.dateFormatter = dateFormatter
+        self.selectedMonthInterval = selectedMonthInterval
+        initialSetup()
     }
-    
-    
-    
+}
+
+extension CalendarMonthSupplementaryView: CalendarMonthOneDayViewDelegate {
+
+    func dayDidTap(view: UIView, date: Date) {
+        delegate?.dayDidTap(date: date)
+    }
 }
