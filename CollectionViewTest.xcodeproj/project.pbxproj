@@ -24,6 +24,7 @@
 		B95CFBA42057FB4E0009512B /* CalendarMonthDecoratorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95CFBA32057FB4E0009512B /* CalendarMonthDecoratorView.swift */; };
 		B9658EF32062BE7800DE8587 /* CalendarMonthOneDayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9658EF22062BE7800DE8587 /* CalendarMonthOneDayView.swift */; };
 		B9658EF52063D03900DE8587 /* CalendarMonthEventViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9658EF42063D03900DE8587 /* CalendarMonthEventViewModel.swift */; };
+		B9658EF72064165900DE8587 /* CalendarMonthSectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9658EF62064165900DE8587 /* CalendarMonthSectionViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +47,7 @@
 		B95CFBA32057FB4E0009512B /* CalendarMonthDecoratorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarMonthDecoratorView.swift; sourceTree = "<group>"; };
 		B9658EF22062BE7800DE8587 /* CalendarMonthOneDayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarMonthOneDayView.swift; sourceTree = "<group>"; };
 		B9658EF42063D03900DE8587 /* CalendarMonthEventViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarMonthEventViewModel.swift; sourceTree = "<group>"; };
+		B9658EF62064165900DE8587 /* CalendarMonthSectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarMonthSectionViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +98,7 @@
 				B95CFB9D2057F9AB0009512B /* CalendarMonthViewCustomLayout.swift */,
 				B95CFB9F2057FA060009512B /* CalendarMonthEventViewCell.swift */,
 				B9658EF42063D03900DE8587 /* CalendarMonthEventViewModel.swift */,
+				B9658EF62064165900DE8587 /* CalendarMonthSectionViewModel.swift */,
 				B95C71E0205965570057A32C /* CalendarEventDay.swift */,
 				B95C71E4205966D10057A32C /* Stub */,
 				B95CFBA12057FA730009512B /* CalendarMonthSupplementaryView.swift */,
@@ -190,6 +193,7 @@
 				B95CFBA02057FA060009512B /* CalendarMonthEventViewCell.swift in Sources */,
 				B95CFB8C2057F9110009512B /* AppDelegate.swift in Sources */,
 				B9658EF32062BE7800DE8587 /* CalendarMonthOneDayView.swift in Sources */,
+				B9658EF72064165900DE8587 /* CalendarMonthSectionViewModel.swift in Sources */,
 				B95C71E6205967170057A32C /* GeneralEventStaff.swift in Sources */,
 				B95C71EA20596D8A0057A32C /* DataSource.swift in Sources */,
 				B95C71E8205967410057A32C /* TotEventStaff.swift in Sources */,

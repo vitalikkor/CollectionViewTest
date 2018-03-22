@@ -71,11 +71,11 @@ class CalendarMonthSupplementaryView: UICollectionReusableView {
         }
     }
     
-    func update(with dateInterval: DateInterval, selectedMonthInterval: DateInterval, dateFormatter: DateFormatter, numberOfHidenItemsPerDay: [Date:Int]) {
-        self.dateInterval = dateInterval
-        self.dateFormatter = dateFormatter
-        self.selectedMonthInterval = selectedMonthInterval
-        self.numberOfHiddenItemsPerDay = numberOfHidenItemsPerDay
+    func setupData(with viewModel: CalendarMonthSectionViewModel) {
+        self.dateInterval = viewModel.dateInterval
+        self.dateFormatter = viewModel.dateFormatter
+        self.selectedMonthInterval = viewModel.selectedMonthInterval
+        self.numberOfHiddenItemsPerDay = viewModel.numberOfHiddenItemsPerDay
         initialSetup()
     }
     

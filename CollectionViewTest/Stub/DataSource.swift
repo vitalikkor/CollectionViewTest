@@ -139,6 +139,19 @@ class DataSource {
         return monthSections[section].visibleEvents.map{$0.event}
     }
     
+    func supplementaryViewModel(for indexPath: IndexPath) -> CalendarMonthSectionViewModel {
+        let dateInterval = monthSections[indexPath.section].dateInteval
+        let hidenItems = monthSections[indexPath.section].hiddenEvents.mapValues{$0.count}
+        return CalendarMonthSectionViewModel(dateInterval: dateInterval, selectedMonthInterval: selectedMonth, dateFormatter: monthDateFormatter, numberOfHidenItemsPerDay: hidenItems)
+    }
+    
+    func monthEventViewModel(for indexPath: IndexPath) -> CalendarMonthEventViewModel {
+        let event = monthSections[indexPath.section].visibleEvents[indexPath.row].event
+        let viewModel = CalendarMonthEventViewModel()
+        viewModel.setupData(eventModel: event)
+        return viewModel
+    }
+    
     var selectedMonth: DateInterval {
         guard let startMonth = self.currentDate.startOfMonth(timeZone: calendar.timeZone), let endMonth = self.currentDate.endOfMonth(timeZone: calendar.timeZone)?.addingTimeInterval(-1) else {
             return DateInterval()

@@ -42,20 +42,15 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CalendarMonthEventViewCell", for: indexPath) as! CalendarMonthEventViewCell
-        let event = dataSource.monthSections[indexPath.section].visibleEvents[indexPath.row].event
-        let viewModel = CalendarMonthEventViewModel()
-        viewModel.setupData(eventModel: event)
+        let viewModel = dataSource.monthEventViewModel(for: indexPath)
         cell.setupData(with: viewModel)
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let supplementaryView = collectionView.dequeueReusableSupplementaryView(ofKind: CalendarMonthViewCustomLayout.Element.supplementaryView.kind, withReuseIdentifier: "SupplementaryCell", for: indexPath) as! CalendarMonthSupplementaryView
-        let dateInterval = dataSource.monthSections[indexPath.section].dateInteval
-        let dateFormatter = dataSource.monthDateFormatter
-        let selectedMonth = dataSource.selectedMonth
-        let hidenItems = dataSource.monthSections[indexPath.section].hiddenEvents.mapValues{$0.count}
-        supplementaryView.update(with: dateInterval, selectedMonthInterval:selectedMonth, dateFormatter: dateFormatter, numberOfHidenItemsPerDay: hidenItems)
+        let viewModelForSupplementaryView = dataSource.supplementaryViewModel(for: indexPath)
+        supplementaryView.setupData(with: viewModelForSupplementaryView)
         supplementaryView.delegate = self
         return supplementaryView
     }
