@@ -51,19 +51,18 @@ class DataSource {
     lazy var timeZone: TimeZone = {
         return calendar.timeZone
     }()
-    
 
-    let maxEventsPerDay = 3
-    
     lazy var currentDate: Date = {
-        return Date().getStartOfDay(timeZone: self.timeZone)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        return Date().getStartOfDay(timeZone: self.timeZone)//dateFormatter.date(from: "2018-02-13T22:00:00.000+0000")!//
     }()
     
     private lazy var events: [CalendarEvents] = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
         
-        let date1 = dateFormatter.date(from: "2018-02-03T22:00:00.000+0000")!//.getStartOfDay()
+        let date1 = dateFormatter.date(from: "2018-02-13T22:00:00.000+0000")!//.getStartOfDay()
 
         let callEvent11 = CalendarEvents.callEvent(CalendarEventCall(uid: "Call11", dateInterval: DateInterval(start: date1, duration: TimeInterval(3600*5)), channel: CallChannel.email, accountName: "Who", accountId: "Account1", status: OCEDBCallStatus.draft, signature: nil, submissionDate: nil))
 
@@ -74,7 +73,7 @@ class DataSource {
 //        let generalEvent12 = CalendarEvents.generalEvent(CalendarGeneralEvent(uid: "GE2", dateInterval: DateInterval(start: date1.addingTimeInterval(TimeInterval(3600)), duration: TimeInterval(3600*24*4)), isAllDay: false, name: "General Event2", description: "event description2"))
 
 
-        let date2 = dateFormatter.date(from: "2018-02-05T22:00:00.000+0000")!.getStartOfDay()
+        let date2 = dateFormatter.date(from: "2018-02-15T22:00:00.000+0000")!.getStartOfDay()
 
         let callEvent21 = CalendarEvents.callEvent(CalendarEventCall(uid: "Call21", dateInterval: DateInterval(start: date2.addingTimeInterval(TimeInterval(3600*1)), duration: TimeInterval(3600*24*2)), channel: CallChannel.email, accountName: "Sort", accountId: "Account21", status: OCEDBCallStatus.draft, signature: nil, submissionDate: nil))
 
@@ -89,21 +88,34 @@ class DataSource {
         return [callEvent11,callEvent12,/* generalEvent11, generalEvent12,*/ callEvent21, callEvent22, callEvent23/*, totEvent31*/]
     }()
     
+    let maxEventsPerDay = 3
+    let weeksCountPerPage = 5
+    let totalPagesCount = 3
+    let daysCountPerWeek = 7
+
     private lazy var symmetricWeeksRange: [DateInterval] = {
-        guard let currentWeek = calendar.dateInterval(of: Calendar.Component.weekOfYear, for: currentDate) else { return [] }
-        var weeksArray: [DateInterval] = [currentWeek]
-        for i in 1...7 {
-            if let nextWeekBeginning = calendar.date(byAdding: .weekOfYear, value: i, to: currentWeek.start),
-                 let nextWeekEnd = calendar.date(byAdding: .weekOfYear, value: i, to: currentWeek.end){
-                let nextWeekInterval = DateInterval(start: nextWeekBeginning, end: nextWeekEnd)
-                weeksArray.insert(nextWeekInterval, at: weeksArray.count)
+        let middlePageNumber = (totalPagesCount+1)/2
+        let firstWeekNumberOfMiddlePage = (middlePageNumber - 1)*weeksCountPerPage + 1
+        let totalWeeksCount = weeksCountPerPage*totalPagesCount
+        
+        guard let firstDayOfSelectedMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: currentDate)),
+            let firstWeekOfSelectedMonth = calendar.dateInterval(of: .weekOfYear, for: firstDayOfSelectedMonth) else { return [] }
+        var weeksArray: [DateInterval] = [firstWeekOfSelectedMonth]
+        for i in 1..<firstWeekNumberOfMiddlePage {
+            if let previouseWeekBeginning = calendar.date(byAdding: .weekOfYear, value: -i, to: firstWeekOfSelectedMonth.start),
+                let previouseWeekEnd = calendar.date(byAdding: .weekOfYear, value: -i, to: firstWeekOfSelectedMonth.end) {
+                let previouseWeekInterval = DateInterval(start: previouseWeekBeginning, end: previouseWeekEnd)
+                weeksArray.insert(previouseWeekInterval, at: 0)
             } else {
                 fatalError()
             }
-            if let previouseWeekBeginning = calendar.date(byAdding: .weekOfYear, value: -i, to: currentWeek.start),
-                let previouseWeekEnd = calendar.date(byAdding: .weekOfYear, value: -i, to: currentWeek.end) {
-                let previouseWeekInterval = DateInterval(start: previouseWeekBeginning, end: previouseWeekEnd)
-                weeksArray.insert(previouseWeekInterval, at: 0)
+        }
+        for i in firstWeekNumberOfMiddlePage+1..<totalWeeksCount {
+            let shiftedIndex = i - firstWeekNumberOfMiddlePage
+            if let nextWeekBeginning = calendar.date(byAdding: .weekOfYear, value: shiftedIndex, to: firstWeekOfSelectedMonth.start),
+                let nextWeekEnd = calendar.date(byAdding: .weekOfYear, value: shiftedIndex, to: firstWeekOfSelectedMonth.end){
+                let nextWeekInterval = DateInterval(start: nextWeekBeginning, end: nextWeekEnd)
+                weeksArray.insert(nextWeekInterval, at: weeksArray.count)
             } else {
                 fatalError()
             }

@@ -9,7 +9,9 @@
 import UIKit
 
 protocol CalendarMonthViewCustomLayoutDataSource: class {
-    var maxItemsInSectionsPerColumn: Int {get}
+    var maxItemsCountInSectionsPerColumn: Int {get}
+    var columnsCountPerScreen: Int {get}
+    var sectionsCountPerScreen: Int {get}
     func layoutParams(for indexPath: IndexPath) -> MonthSectionEventLayout
 }
 
@@ -33,8 +35,13 @@ class CalendarMonthViewCustomLayout: UICollectionViewLayout {
     }
     weak var dataSource: CalendarMonthViewCustomLayoutDataSource?
 
-    private let columnsCountPerScreen: Int = 7
-    private let sectionsCountPerScreen: Int = 5
+    private lazy var columnsCountPerScreen: Int = {
+       return dataSource?.columnsCountPerScreen ?? 7
+    }()
+    private lazy var sectionsCountPerScreen: Int = {
+        return dataSource?.sectionsCountPerScreen ?? 5
+    }()
+    
     private let separatorLineWidth: CGFloat = 0.6
     private let verticalCellsDistance: CGFloat = 2
     private let cellsLeftInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 0)
@@ -46,7 +53,7 @@ class CalendarMonthViewCustomLayout: UICollectionViewLayout {
     let sectionInsets = UIEdgeInsets(top: 30, left: 0, bottom: 20, right: 0)
     
     var cellHeight: CGFloat {
-        guard let maxItemsInSections = dataSource?.maxItemsInSectionsPerColumn else { return 0.0 }
+        guard let maxItemsInSections = dataSource?.maxItemsCountInSectionsPerColumn else { return 0.0 }
         let computedHeight = (sectionSize.height - sectionInsets.top - sectionInsets.bottom)/CGFloat(maxItemsInSections) - verticalCellsDistance*CGFloat(maxItemsInSections)
         return min(preferredCellHeight,computedHeight)
     }

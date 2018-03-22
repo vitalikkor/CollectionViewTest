@@ -61,10 +61,17 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
 
 }
-//
+
 extension ViewController: CalendarMonthViewCustomLayoutDataSource {
+    var columnsCountPerScreen: Int {
+        return dataSource.daysCountPerWeek
+    }
     
-    var maxItemsInSectionsPerColumn: Int {
+    var sectionsCountPerScreen: Int {
+        return dataSource.weeksCountPerPage
+    }
+    
+    var maxItemsCountInSectionsPerColumn: Int {
         return dataSource.maxEventsPerDay
     }
     
