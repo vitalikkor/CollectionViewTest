@@ -23,6 +23,7 @@
 		B95CFBA22057FA730009512B /* CalendarMonthSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95CFBA12057FA730009512B /* CalendarMonthSupplementaryView.swift */; };
 		B95CFBA42057FB4E0009512B /* CalendarMonthDecoratorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95CFBA32057FB4E0009512B /* CalendarMonthDecoratorView.swift */; };
 		B9658EF32062BE7800DE8587 /* CalendarMonthOneDayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9658EF22062BE7800DE8587 /* CalendarMonthOneDayView.swift */; };
+		B9658EF52063D03900DE8587 /* CalendarMonthEventViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9658EF42063D03900DE8587 /* CalendarMonthEventViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,7 @@
 		B95CFBA12057FA730009512B /* CalendarMonthSupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarMonthSupplementaryView.swift; sourceTree = "<group>"; };
 		B95CFBA32057FB4E0009512B /* CalendarMonthDecoratorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarMonthDecoratorView.swift; sourceTree = "<group>"; };
 		B9658EF22062BE7800DE8587 /* CalendarMonthOneDayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarMonthOneDayView.swift; sourceTree = "<group>"; };
+		B9658EF42063D03900DE8587 /* CalendarMonthEventViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarMonthEventViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +95,7 @@
 				B95CFB8F2057F9110009512B /* Main.storyboard */,
 				B95CFB9D2057F9AB0009512B /* CalendarMonthViewCustomLayout.swift */,
 				B95CFB9F2057FA060009512B /* CalendarMonthEventViewCell.swift */,
+				B9658EF42063D03900DE8587 /* CalendarMonthEventViewModel.swift */,
 				B95C71E0205965570057A32C /* CalendarEventDay.swift */,
 				B95C71E4205966D10057A32C /* Stub */,
 				B95CFBA12057FA730009512B /* CalendarMonthSupplementaryView.swift */,
@@ -177,6 +180,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B9658EF52063D03900DE8587 /* CalendarMonthEventViewModel.swift in Sources */,
 				B95CFB9E2057F9AB0009512B /* CalendarMonthViewCustomLayout.swift in Sources */,
 				B95C71E3205966B60057A32C /* EventCallStaff.swift in Sources */,
 				B95CFB8E2057F9110009512B /* ViewController.swift in Sources */,

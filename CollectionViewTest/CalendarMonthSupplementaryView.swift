@@ -80,7 +80,7 @@ class CalendarMonthSupplementaryView: UICollectionReusableView {
     }
     
     override func prepareForReuse() {
-        
+        super.prepareForReuse()
     }
     
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {

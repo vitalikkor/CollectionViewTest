@@ -21,6 +21,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         customLayout.dataSource = self
         collectionView.showsVerticalScrollIndicator = false
         collectionView.collectionViewLayout = customLayout
+        collectionView.bounces = false
+        collectionView.isPagingEnabled = true
         collectionView.reloadData()
     }
 
@@ -40,17 +42,10 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CalendarMonthEventViewCell", for: indexPath) as! CalendarMonthEventViewCell
-        let eventType = dataSource.monthSections[indexPath.section].visibleEvents[indexPath.row].event
-        let title: String
-        switch eventType {
-            case .callEvent(let call):
-                title = call.accountName
-            case .generalEvent(let generalEvent):
-                title = generalEvent.description
-            case .totEvent(let totEvent):
-                title = totEvent.spanType.rawValue
-        }
-        cell.titleLabel.text = title
+        let event = dataSource.monthSections[indexPath.section].visibleEvents[indexPath.row].event
+        let viewModel = CalendarMonthEventViewModel()
+        viewModel.setupData(eventModel: event)
+        cell.setupData(with: viewModel)
         return cell
     }
     

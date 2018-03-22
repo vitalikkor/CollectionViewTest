@@ -39,15 +39,15 @@ class CalendarMonthViewCustomLayout: UICollectionViewLayout {
     private let verticalCellsDistance: CGFloat = 2
     private let cellsLeftInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 0)
     private let cellsRightInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 5)
-    private let preferredCellHeight: CGFloat = 40
+    private let preferredCellHeight: CGFloat = 35
     private var oldBounds = CGRect.zero
     private var contentHeight: CGFloat = 0
     
-    let sectionInsets = UIEdgeInsets(top: 30, left: 0, bottom: 0, right: 0)
+    let sectionInsets = UIEdgeInsets(top: 30, left: 0, bottom: 20, right: 0)
     
     var cellHeight: CGFloat {
         guard let maxItemsInSections = dataSource?.maxItemsInSectionsPerColumn else { return 0.0 }
-        let computedHeight = (sectionSize.height - sectionInsets.top)/(CGFloat(maxItemsInSections + 1) + verticalCellsDistance)
+        let computedHeight = (sectionSize.height - sectionInsets.top - sectionInsets.bottom)/CGFloat(maxItemsInSections) - verticalCellsDistance*CGFloat(maxItemsInSections)
         return min(preferredCellHeight,computedHeight)
     }
     

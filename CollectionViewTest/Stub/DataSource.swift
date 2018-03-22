@@ -78,9 +78,9 @@ class DataSource {
 
         let callEvent21 = CalendarEvents.callEvent(CalendarEventCall(uid: "Call21", dateInterval: DateInterval(start: date2.addingTimeInterval(TimeInterval(3600*1)), duration: TimeInterval(3600*24*2)), channel: CallChannel.email, accountName: "Sort", accountId: "Account21", status: OCEDBCallStatus.draft, signature: nil, submissionDate: nil))
 
-        let callEvent22 = CalendarEvents.callEvent(CalendarEventCall(uid: "Call22", dateInterval: DateInterval(start: date2.addingTimeInterval(TimeInterval(3600*2)), duration: TimeInterval(3600)), channel: CallChannel.email, accountName: "Typo", accountId: "Account22", status: OCEDBCallStatus.draft, signature: nil, submissionDate: nil))
+        let callEvent22 = CalendarEvents.callEvent(CalendarEventCall(uid: "Call22", dateInterval: DateInterval(start: date2.addingTimeInterval(TimeInterval(3600*2)), duration: TimeInterval(3600*24*1)), channel: CallChannel.email, accountName: "Typo", accountId: "Account22", status: OCEDBCallStatus.draft, signature: nil, submissionDate: nil))
         
-         let callEvent23 = CalendarEvents.callEvent(CalendarEventCall(uid: "Call22", dateInterval: DateInterval(start: date2.addingTimeInterval(TimeInterval(3600*1)), duration: TimeInterval(3600)), channel: CallChannel.email, accountName: "Hidden", accountId: "Account22", status: OCEDBCallStatus.draft, signature: nil, submissionDate: nil))
+        let callEvent23 = CalendarEvents.callEvent(CalendarEventCall(uid: "Call22", dateInterval: DateInterval(start: date2.addingTimeInterval(TimeInterval(3600*2)), duration: TimeInterval(3600*24*1)), channel: CallChannel.email, accountName: "Hidden", accountId: "Account22", status: OCEDBCallStatus.draft, signature: nil, submissionDate: nil))
 //
 //        let date3 = date2.appendDays(days: 1)!
 //

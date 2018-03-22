@@ -29,7 +29,6 @@ class CalendarMonthOneDayView: UIView {
         let label = UILabel(frame: self.frame)
         label.textColor = UIColor.blue
         label.font = UIFont.systemFont(ofSize: 10)
-        label.text = "more..."
         label.textAlignment = .center
         label.isUserInteractionEnabled = true
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -72,6 +71,7 @@ class CalendarMonthOneDayView: UIView {
         } else {
             moereItemsLabel.isHidden = true
         }
+        moereItemsLabel.text = String(format: "%d more...", numberOfHiddenItems)
         titleLabel.text = dateformatter.string(from: date)
         self.date = date
     }
