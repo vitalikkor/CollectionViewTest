@@ -50,7 +50,7 @@ class CalendarMonthViewDataSource {
     lazy var calendar: Calendar = {
         var cal = Calendar.current
         cal.timeZone = .current
-        cal.firstWeekday = 4
+        cal.firstWeekday = 1
         return cal
     }()
     
@@ -91,7 +91,7 @@ class CalendarMonthViewDataSource {
 
         let totEvent31 = CalendarEvents.totEvent(CalendarTOTEvent(uid: "TOT31", dateInterval: DateInterval(start: date3.addingTimeInterval(TimeInterval(3600*2)), duration: TimeInterval(3600)), name: "totEvent31", spanType: SnapType.hours, timeOff: "totEvent31", type: "totEvent31"))
         
-        return [/*callEvent11,*/callEvent12, generalEvent11, generalEvent12, callEvent21, callEvent22, callEvent23, totEvent31]
+        return [callEvent11,callEvent12, generalEvent11, generalEvent12, callEvent21, callEvent22, callEvent23, totEvent31]
     }()
     
     let maxEventsPerDay = 3
@@ -116,7 +116,7 @@ class CalendarMonthViewDataSource {
                 fatalError()
             }
         }
-        for i in firstWeekNumberOfMiddlePage+1..<totalWeeksCount {
+        for i in firstWeekNumberOfMiddlePage+1...totalWeeksCount {
             let shiftedIndex = i - firstWeekNumberOfMiddlePage
             if let nextWeekBeginning = calendar.date(byAdding: .weekOfYear, value: shiftedIndex, to: firstWeekOfSelectedMonth.start),
                 let nextWeekEnd = calendar.date(byAdding: .weekOfYear, value: shiftedIndex, to: firstWeekOfSelectedMonth.end){
@@ -173,7 +173,11 @@ class CalendarMonthViewDataSource {
             var monthSection = MonthSection(dateInteval: weekInterval)
             let weekEvents = calendarEvents.filter{ event in
                 if let intersection = event.dateInterval.intersection(with: weekInterval) {
-                    return intersection.duration >= 0
+                    if intersection.duration > 0 {
+                        return true
+                    } else if intersection.duration == 0 {
+                        return intersection.end != weekInterval.end
+                    }
                 }
                 return false
             }
