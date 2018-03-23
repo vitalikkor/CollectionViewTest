@@ -11,7 +11,7 @@
 		B95C71E3205966B60057A32C /* EventCallStaff.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95C71E2205966B60057A32C /* EventCallStaff.swift */; };
 		B95C71E6205967170057A32C /* GeneralEventStaff.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95C71E5205967170057A32C /* GeneralEventStaff.swift */; };
 		B95C71E8205967410057A32C /* TotEventStaff.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95C71E7205967410057A32C /* TotEventStaff.swift */; };
-		B95C71EA20596D8A0057A32C /* DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95C71E920596D8A0057A32C /* DataSource.swift */; };
+		B95C71EA20596D8A0057A32C /* CalendarMonthViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95C71E920596D8A0057A32C /* CalendarMonthViewDataSource.swift */; };
 		B95C71EC205971E70057A32C /* extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95C71EB205971E70057A32C /* extensions.swift */; };
 		B95CFB8C2057F9110009512B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95CFB8B2057F9110009512B /* AppDelegate.swift */; };
 		B95CFB8E2057F9110009512B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95CFB8D2057F9110009512B /* ViewController.swift */; };
@@ -34,7 +34,7 @@
 		B95C71E2205966B60057A32C /* EventCallStaff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCallStaff.swift; sourceTree = "<group>"; };
 		B95C71E5205967170057A32C /* GeneralEventStaff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralEventStaff.swift; sourceTree = "<group>"; };
 		B95C71E7205967410057A32C /* TotEventStaff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotEventStaff.swift; sourceTree = "<group>"; };
-		B95C71E920596D8A0057A32C /* DataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSource.swift; sourceTree = "<group>"; };
+		B95C71E920596D8A0057A32C /* CalendarMonthViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarMonthViewDataSource.swift; sourceTree = "<group>"; };
 		B95C71EB205971E70057A32C /* extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = extensions.swift; sourceTree = "<group>"; };
 		B95CFB882057F9110009512B /* CollectionViewTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CollectionViewTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B95CFB8B2057F9110009512B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -68,9 +68,9 @@
 		B95C71E4205966D10057A32C /* Stub */ = {
 			isa = PBXGroup;
 			children = (
+				B95C71E0205965570057A32C /* CalendarEventDay.swift */,
 				B95C71E2205966B60057A32C /* EventCallStaff.swift */,
 				B95C71EB205971E70057A32C /* extensions.swift */,
-				B95C71E920596D8A0057A32C /* DataSource.swift */,
 				B95C71E5205967170057A32C /* GeneralEventStaff.swift */,
 				B95C71E7205967410057A32C /* TotEventStaff.swift */,
 			);
@@ -104,7 +104,7 @@
 				B9658EF42063D03900DE8587 /* CalendarMonthEventViewModel.swift */,
 				B9658EF62064165900DE8587 /* CalendarMonthSectionViewModel.swift */,
 				B9658EFA2064FFF400DE8587 /* CalendarMonthHeaderViewModel.swift */,
-				B95C71E0205965570057A32C /* CalendarEventDay.swift */,
+				B95C71E920596D8A0057A32C /* CalendarMonthViewDataSource.swift */,
 				B95C71E4205966D10057A32C /* Stub */,
 				B95CFBA12057FA730009512B /* CalendarMonthSupplementaryView.swift */,
 				B9658EF82064F4E900DE8587 /* CalendarMonthHeaderView.swift */,
@@ -203,7 +203,7 @@
 				B9658EF32062BE7800DE8587 /* CalendarMonthOneDayView.swift in Sources */,
 				B9658EF72064165900DE8587 /* CalendarMonthSectionViewModel.swift in Sources */,
 				B95C71E6205967170057A32C /* GeneralEventStaff.swift in Sources */,
-				B95C71EA20596D8A0057A32C /* DataSource.swift in Sources */,
+				B95C71EA20596D8A0057A32C /* CalendarMonthViewDataSource.swift in Sources */,
 				B95C71E8205967410057A32C /* TotEventStaff.swift in Sources */,
 				B95C71EC205971E70057A32C /* extensions.swift in Sources */,
 			);

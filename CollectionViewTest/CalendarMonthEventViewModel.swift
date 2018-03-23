@@ -23,15 +23,23 @@ class CalendarMonthEventViewModel {
         switch eventModel {
             case .callEvent(let eventCall):
                 self.titleText = eventCall.accountName
+                borderColor = UIColor.blue
+                backGroundColor = UIColor.cyan
+                accountTypeImage = UIImage(named: "EventType")
+                eventTypeImage = UIImage(named: "EventType")
             case .generalEvent(let generalEvent):
                 self.titleText = generalEvent.name
+                borderColor = UIColor.blue
+                backGroundColor = UIColor.cyan
+                accountTypeImage = UIImage(named: "EventType")
+                eventTypeImage = UIImage(named: "EventType")
             case .totEvent(let totEvent):
                 self.titleText = totEvent.type
+                borderColor = UIColor.blue
+                backGroundColor = UIColor.cyan
+                accountTypeImage = UIImage(named: "EventType")
+                eventTypeImage = UIImage(named: "EventType")
         }
-        borderColor = UIColor.blue
-        backGroundColor = UIColor.cyan
-        accountTypeImage = UIImage(named: "EventType")
-        eventTypeImage = UIImage(named: "EventType")
         self.uid = eventModel.uid
     }
 }

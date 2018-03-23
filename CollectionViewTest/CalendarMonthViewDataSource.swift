@@ -1,5 +1,5 @@
 //
-//  DataSource.swift
+//  CalendarMonthViewDataSource.swift
 //  CollectionViewTest
 //
 //  Created by Vitaliy Korobitsyn on 3/14/18.
@@ -33,7 +33,7 @@ struct MonthSectionEventLayout {
     let duration: Int
 }
 
-class DataSource {
+class CalendarMonthViewDataSource {
 
     lazy var monthDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -50,7 +50,7 @@ class DataSource {
     lazy var calendar: Calendar = {
         var cal = Calendar.current
         cal.timeZone = .current
-        cal.firstWeekday = 2
+        cal.firstWeekday = 4
         return cal
     }()
     
@@ -70,28 +70,28 @@ class DataSource {
         
         let date1 = dateFormatter.date(from: "2018-02-13T22:00:00.000+0000")!//.getStartOfDay()
 
-        let callEvent11 = CalendarEvents.callEvent(CalendarEventCall(uid: "Call11", dateInterval: DateInterval(start: date1, duration: TimeInterval(3600*5)), channel: CallChannel.email, accountName: "Who", accountId: "Account1", status: OCEDBCallStatus.draft, signature: nil, submissionDate: nil))
+        let callEvent11 = CalendarEvents.callEvent(CalendarEventCall(uid: "Call11", dateInterval: DateInterval(start: date1, duration: TimeInterval(3600*5)), channel: CallChannel.email, accountName: "callEvent11", accountId: "Account1", status: OCEDBCallStatus.draft, signature: nil, submissionDate: nil))
 
-        let callEvent12 = CalendarEvents.callEvent(CalendarEventCall(uid: "Call12", dateInterval: DateInterval(start: date1.addingTimeInterval(TimeInterval(3600*0)), duration: TimeInterval(3600*24*2)), channel: CallChannel.email, accountName: "Pony", accountId: "Account2", status: OCEDBCallStatus.draft, signature: nil, submissionDate: nil))
+        let callEvent12 = CalendarEvents.callEvent(CalendarEventCall(uid: "Call12", dateInterval: DateInterval(start: date1.addingTimeInterval(TimeInterval(3600*0)), duration: TimeInterval(3600*24*2)), channel: CallChannel.email, accountName: "callEvent12", accountId: "accountId12", status: OCEDBCallStatus.draft, signature: nil, submissionDate: nil))
 
-//        let generalEvent11 = CalendarEvents.generalEvent(CalendarGeneralEvent(uid: "GE1", dateInterval: DateInterval(start: date1.addingTimeInterval(TimeInterval(3600*24*3)), duration: TimeInterval(3600*24*3)), isAllDay: false, name: "General Event1", description: "event description1"))
-//
-//        let generalEvent12 = CalendarEvents.generalEvent(CalendarGeneralEvent(uid: "GE2", dateInterval: DateInterval(start: date1.addingTimeInterval(TimeInterval(3600)), duration: TimeInterval(3600*24*4)), isAllDay: false, name: "General Event2", description: "event description2"))
+        let generalEvent11 = CalendarEvents.generalEvent(CalendarGeneralEvent(uid: "GE1", dateInterval: DateInterval(start: date1.addingTimeInterval(TimeInterval(3600*24*3)), duration: TimeInterval(3600*24*2)), isAllDay: false, name: "generalEvent11", description: "event description1"))
+
+        let generalEvent12 = CalendarEvents.generalEvent(CalendarGeneralEvent(uid: "GE2", dateInterval: DateInterval(start: date1.addingTimeInterval(TimeInterval(3600)), duration: TimeInterval(3600*24*4)), isAllDay: false, name: "generalEvent12", description: "event description2"))
 
 
         let date2 = dateFormatter.date(from: "2018-02-15T22:00:00.000+0000")!.getStartOfDay()
 
-        let callEvent21 = CalendarEvents.callEvent(CalendarEventCall(uid: "Call21", dateInterval: DateInterval(start: date2.addingTimeInterval(TimeInterval(3600*1)), duration: TimeInterval(3600*24*2)), channel: CallChannel.email, accountName: "Sort", accountId: "Account21", status: OCEDBCallStatus.draft, signature: nil, submissionDate: nil))
+        let callEvent21 = CalendarEvents.callEvent(CalendarEventCall(uid: "Call21", dateInterval: DateInterval(start: date2.addingTimeInterval(TimeInterval(3600*1)), duration: TimeInterval(3600*24*2)), channel: CallChannel.email, accountName: "callEvent21", accountId: "Account21", status: OCEDBCallStatus.draft, signature: nil, submissionDate: nil))
 
-        let callEvent22 = CalendarEvents.callEvent(CalendarEventCall(uid: "Call22", dateInterval: DateInterval(start: date2.addingTimeInterval(TimeInterval(3600*2)), duration: TimeInterval(3600*24*1)), channel: CallChannel.email, accountName: "Typo", accountId: "Account22", status: OCEDBCallStatus.draft, signature: nil, submissionDate: nil))
+        let callEvent22 = CalendarEvents.callEvent(CalendarEventCall(uid: "Call22", dateInterval: DateInterval(start: date2.addingTimeInterval(TimeInterval(3600*2)), duration: TimeInterval(3600*24*1)), channel: CallChannel.email, accountName: "callEvent22", accountId: "Account22", status: OCEDBCallStatus.draft, signature: nil, submissionDate: nil))
         
-        let callEvent23 = CalendarEvents.callEvent(CalendarEventCall(uid: "Call22", dateInterval: DateInterval(start: date2.addingTimeInterval(TimeInterval(3600*2)), duration: TimeInterval(3600*24*1)), channel: CallChannel.email, accountName: "Hidden", accountId: "Account22", status: OCEDBCallStatus.draft, signature: nil, submissionDate: nil))
-//
-//        let date3 = date2.appendDays(days: 1)!
-//
-//        let totEvent31 = CalendarEvents.totEvent(CalendarTOTEvent(uid: "TOT31", dateInterval: DateInterval(start: date3.addingTimeInterval(TimeInterval(3600*2)), duration: TimeInterval(3600)), name: "tot-t", spanType: SnapType.hours, timeOff: "String", type: "String"))
+        let callEvent23 = CalendarEvents.callEvent(CalendarEventCall(uid: "Call22", dateInterval: DateInterval(start: date2.addingTimeInterval(TimeInterval(3600*2)), duration: TimeInterval(3600*24*1)), channel: CallChannel.email, accountName: "callEvent23", accountId: "Account22", status: OCEDBCallStatus.draft, signature: nil, submissionDate: nil))
+
+        let date3 = date2.appendDays(days: 1)!
+
+        let totEvent31 = CalendarEvents.totEvent(CalendarTOTEvent(uid: "TOT31", dateInterval: DateInterval(start: date3.addingTimeInterval(TimeInterval(3600*2)), duration: TimeInterval(3600)), name: "totEvent31", spanType: SnapType.hours, timeOff: "totEvent31", type: "totEvent31"))
         
-        return [callEvent11,callEvent12,/* generalEvent11, generalEvent12,*/ callEvent21, callEvent22, callEvent23/*, totEvent31*/]
+        return [/*callEvent11,*/callEvent12, generalEvent11, generalEvent12, callEvent21, callEvent22, callEvent23, totEvent31]
     }()
     
     let maxEventsPerDay = 3
@@ -141,10 +141,6 @@ class DataSource {
         calback(events)
     }
     
-    func events(in section: Int) -> [CalendarEvents]{
-        return monthSections[section].visibleEvents.map{$0.event}
-    }
-    
     func headerViewModel() -> CalendarMonthHeaderViewModel {
         let dateInterval = monthSections.first?.dateInteval ?? DateInterval()
         return CalendarMonthHeaderViewModel(dateFormatter: weekDayNamesDateFormatter, dateInterval: dateInterval, colorBackground: UIColor.lightGray)
@@ -163,7 +159,7 @@ class DataSource {
         return viewModel
     }
     
-    var selectedMonth: DateInterval {
+    private var selectedMonth: DateInterval {
         guard let startMonth = self.currentDate.startOfMonth(timeZone: calendar.timeZone), let endMonth = self.currentDate.endOfMonth(timeZone: calendar.timeZone)?.addingTimeInterval(-1) else {
             return DateInterval()
         }
@@ -177,7 +173,7 @@ class DataSource {
             var monthSection = MonthSection(dateInteval: weekInterval)
             let weekEvents = calendarEvents.filter{ event in
                 if let intersection = event.dateInterval.intersection(with: weekInterval) {
-                    return intersection.duration > 0
+                    return intersection.duration >= 0
                 }
                 return false
             }
@@ -248,19 +244,26 @@ class DataSource {
     private func findeIndexRowToPlace(dateInterval: DateInterval, placedIntervales: inout [[DateInterval]], maxRowIndex: Int) -> Int? {
         var rowIndex = 0
         repeat  {
+            //for first iteration no needs to check through all available rows for insertion
             if placedIntervales[rowIndex].count == 0 {
                 placedIntervales[rowIndex].append(dateInterval)
                 return rowIndex
             }
+            var doesIntrevalIntersectAnyIntervals = true
+            //iterate by all placed intervales to check if new one do not intersect them
             innerLoop: for placedIntervalesInRow in placedIntervales[rowIndex] {
                 if placedIntervalesInRow.intersects(dateInterval) {
-                    rowIndex += 1
+                    doesIntrevalIntersectAnyIntervals = true
                     break innerLoop
                 } else {
-                    placedIntervales[rowIndex].append(dateInterval)
-                    return rowIndex
+                    doesIntrevalIntersectAnyIntervals = false
                 }
             }
+            if doesIntrevalIntersectAnyIntervals == false {
+                placedIntervales[rowIndex].append(dateInterval)
+                return rowIndex
+            }
+            rowIndex += 1
         } while rowIndex < maxRowIndex
         return nil
     }

@@ -10,7 +10,7 @@ import UIKit
 
 class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource  {
 
-    let dataSource = DataSource()
+    let dataSource = CalendarMonthViewDataSource()
     
     lazy var headerView: CalendarMonthHeaderView = {
         let view = CalendarMonthHeaderView(frame: .zero)
@@ -60,10 +60,6 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         headerView.heightAnchor.constraint(equalToConstant: 50).isActive = true
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return dataSource.monthSections.count
