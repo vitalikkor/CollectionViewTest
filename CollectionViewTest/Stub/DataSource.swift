@@ -41,6 +41,12 @@ class DataSource {
         return formatter
     }()
     
+    lazy var weekDayNamesDateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEE"
+        return formatter
+    }()
+    
     lazy var calendar: Calendar = {
         var cal = Calendar.current
         cal.timeZone = .current
@@ -137,6 +143,11 @@ class DataSource {
     
     func events(in section: Int) -> [CalendarEvents]{
         return monthSections[section].visibleEvents.map{$0.event}
+    }
+    
+    func headerViewModel() -> CalendarMonthHeaderViewModel {
+        let dateInterval = monthSections.first?.dateInteval ?? DateInterval()
+        return CalendarMonthHeaderViewModel(dateFormatter: weekDayNamesDateFormatter, dateInterval: dateInterval, colorBackground: UIColor.lightGray)
     }
     
     func supplementaryViewModel(for indexPath: IndexPath) -> CalendarMonthSectionViewModel {

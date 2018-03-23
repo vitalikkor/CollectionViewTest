@@ -10,20 +10,54 @@ import UIKit
 
 class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource  {
 
-    @IBOutlet weak var collectionView: UICollectionView!
     let dataSource = DataSource()
+    
+    lazy var headerView: CalendarMonthHeaderView = {
+        let view = CalendarMonthHeaderView(frame: .zero)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        let viewModel = dataSource.headerViewModel()
+        view.setupData(with: viewModel)
+        return view
+    }()
+    
+    lazy var collectionView: UICollectionView = {
+        let customLayout = CalendarMonthViewCustomLayout()
+        customLayout.dataSource = self
+        let collection = UICollectionView(frame: .zero, collectionViewLayout: customLayout)
+        collection.backgroundColor = UIColor.white
+        collection.showsVerticalScrollIndicator = false
+        collection.bounces = false
+        collection.isPagingEnabled = true
+        collection.translatesAutoresizingMaskIntoConstraints = false
+        return collection
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupHeaderView()
+        setupCollectionView()
+    }
+    
+    private func setupCollectionView() {
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        self.view.addSubview(collectionView)
+        collectionView.topAnchor.constraint(equalTo: headerView.bottomAnchor).isActive = true
+        collectionView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
+        collectionView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
+        collectionView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
         collectionView.register(CalendarMonthEventViewCell.self, forCellWithReuseIdentifier: "CalendarMonthEventViewCell")
         collectionView.register(CalendarMonthSupplementaryView.self, forSupplementaryViewOfKind:  CalendarMonthViewCustomLayout.Element.supplementaryView.kind, withReuseIdentifier: "SupplementaryCell")
-        let customLayout = CalendarMonthViewCustomLayout()
-        customLayout.dataSource = self
-        collectionView.showsVerticalScrollIndicator = false
-        collectionView.collectionViewLayout = customLayout
-        collectionView.bounces = false
-        collectionView.isPagingEnabled = true
         collectionView.reloadData()
+    }
+    
+    private func setupHeaderView() {
+        self.view.addSubview(headerView)
+        headerView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        headerView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        headerView.heightAnchor.constraint(equalToConstant: 50).isActive = true
     }
 
     override func didReceiveMemoryWarning() {

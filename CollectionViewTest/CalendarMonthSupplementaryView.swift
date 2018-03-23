@@ -20,15 +20,7 @@ class CalendarMonthSupplementaryView: UICollectionReusableView {
     override var reuseIdentifier: String? {
         return "SupplementaryCell"
     }
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-       super.init(coder: aDecoder)
-    }
-    
+
     private(set) var dateInterval: DateInterval?
     private(set) var dateFormatter: DateFormatter?
     private(set) var selectedMonthInterval: DateInterval?

@@ -74,7 +74,7 @@ class CalendarMonthViewCustomLayout: UICollectionViewLayout {
         let collectionViewSize: CGSize = collectionView?.bounds.size ?? .zero
         return CGSize(width: collectionViewSize.width, height: collectionViewSize.height/CGFloat(sectionsCountPerScreen))
     }
-
+    
     override var collectionViewContentSize: CGSize {
         return CGSize(width: collectionView?.frame.width ?? 0, height: contentHeight)
     }
@@ -115,7 +115,12 @@ class CalendarMonthViewCustomLayout: UICollectionViewLayout {
     }
 
     override func layoutAttributesForSupplementaryView(ofKind elementKind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
-        return cashedAttributs[Element.supplementaryView]?[indexPath]
+        switch elementKind {
+            case Element.supplementaryView.kind:
+                 return cashedAttributs[Element.supplementaryView]?[indexPath]
+            default:
+                return nil
+        }
     }
 
     override func layoutAttributesForDecorationView(ofKind elementKind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
