@@ -58,7 +58,7 @@ class CalendarMonthViewDataSource {
         return calendar.timeZone
     }()
 
-    lazy var currentDate: Date = {
+    lazy var selectedDate: Date = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
         return Date().getStartOfDay(timeZone: self.timeZone)//dateFormatter.date(from: "2018-02-13T22:00:00.000+0000")!//
@@ -99,12 +99,13 @@ class CalendarMonthViewDataSource {
     let totalPagesCount = 3
     let daysCountPerWeek = 7
 
+    //builds range of weeks with selected month at the center
     private lazy var symmetricWeeksRange: [DateInterval] = {
         let middlePageNumber = (totalPagesCount+1)/2
         let firstWeekNumberOfMiddlePage = (middlePageNumber - 1)*weeksCountPerPage + 1
         let totalWeeksCount = weeksCountPerPage*totalPagesCount
         
-        guard let firstDayOfSelectedMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: currentDate)),
+        guard let firstDayOfSelectedMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: selectedDate)),
             let firstWeekOfSelectedMonth = calendar.dateInterval(of: .weekOfYear, for: firstDayOfSelectedMonth) else { return [] }
         var weeksArray: [DateInterval] = [firstWeekOfSelectedMonth]
         for i in 1..<firstWeekNumberOfMiddlePage {
@@ -159,16 +160,19 @@ class CalendarMonthViewDataSource {
         return viewModel
     }
     
+    //returns the whole month which contains selected date
     private var selectedMonth: DateInterval {
-        guard let startMonth = self.currentDate.startOfMonth(timeZone: calendar.timeZone), let endMonth = self.currentDate.endOfMonth(timeZone: calendar.timeZone)?.addingTimeInterval(-1) else {
+        guard let startMonth = self.selectedDate.startOfMonth(timeZone: calendar.timeZone), let endMonth = self.selectedDate.endOfMonth(timeZone: calendar.timeZone)?.addingTimeInterval(-1) else {
             return DateInterval()
         }
         return DateInterval(start: startMonth, end: endMonth)
     }
     
+    //composes the convenient data structure for each section(week) of the collectionView MonthSection
     private func composeMonthSections(with calendarEvents: [CalendarEvents]) {
         for weekInterval in self.symmetricWeeksRange {
             var rowIndexInsideWeek: Int?
+            //this array contains date intervals from event interval and is used to check intersections between events
             var alreadyPlacedIntervales: [[DateInterval]] = [[DateInterval]](repeating: [], count: maxEventsPerDay)
             var monthSection = MonthSection(dateInteval: weekInterval)
             let weekEvents = calendarEvents.filter{ event in
@@ -185,6 +189,7 @@ class CalendarMonthViewDataSource {
             while sortedWeekEvents.count > 0 {
                 let event = sortedWeekEvents.removeFirst()
                 guard let endDayOfEventEnd = event.dateInterval.end.getEndOfDay(timeZone: timeZone) else { fatalError()}
+                //this dateInterval is event interval which is extended from left to the start of the day and from right to the end of the day
                 let fullEventDayInterval = DateInterval(start: event.dateInterval.start.getStartOfDay(timeZone: timeZone), end: endDayOfEventEnd)
                 rowIndexInsideWeek = self.findeIndexRowToPlace(dateInterval: fullEventDayInterval, placedIntervales: &alreadyPlacedIntervales, maxRowIndex: maxEventsPerDay)
                 if let rowIndex = rowIndexInsideWeek {
@@ -220,7 +225,7 @@ class CalendarMonthViewDataSource {
             monthSections.append(monthSection)
         }
     }
-    
+    //sorts events by the next rules: first of all by biggest event duration in current week and the second is by start date
     private func sortEvents(events: [CalendarEvents], inside weekInterval: DateInterval) -> [CalendarEvents] {
         return events.sorted {
             let beginningOfIntervalLeftItem = max($0.dateInterval.start, weekInterval.start).getStartOfDay(timeZone: timeZone)
@@ -233,6 +238,7 @@ class CalendarMonthViewDataSource {
         }
     }
     
+    //eturns event duration, it is considered that if event continues at least one second of a day then on this day event has full one day duration
     private func daysDuration(of event: CalendarEvents, in weekInterval: DateInterval) -> Int {
         let beginingOfEndEventDate = event.dateInterval.end.getStartOfDay(timeZone: timeZone)
         guard let endEventDate = calendar.date(byAdding: .day, value: 1, to: beginingOfEndEventDate) else { return 0 }
@@ -245,6 +251,7 @@ class CalendarMonthViewDataSource {
         return max(count,minimalDaysDuration)
     }
     
+    //filled the 2 dimensional matrix of events duration for certain week.
     private func findeIndexRowToPlace(dateInterval: DateInterval, placedIntervales: inout [[DateInterval]], maxRowIndex: Int) -> Int? {
         var rowIndex = 0
         repeat  {
