@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CalendarMonthDecoratorView: UICollectionReusableView {
+class CalendarMonthDecoratorView: UICollectionReusableView, SingleReuseIdentifier {
 
     override init(frame: CGRect) {
         super.init(frame: frame)

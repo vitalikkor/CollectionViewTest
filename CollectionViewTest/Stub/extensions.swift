@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 enum DayOfWeek: Int {
     case sunday = 1, monday, tuesday, wednesday, thursday, friday, saturday
@@ -282,5 +283,23 @@ class IteratableDateInterval: Sequence {
     
     func makeIterator() -> DateIntervalIterator {
         return DateIntervalIterator(self.dateInterval, self.calendarComponent, self.calendar)
+    }
+}
+
+protocol SingleReuseIdentifier: class {
+    static var identifier: String {get}
+    static var nibName: String {get}
+    static var nib: UINib {get}
+}
+
+extension SingleReuseIdentifier where Self: UICollectionReusableView {
+    static var identifier: String {
+        return String(describing: type(of: self)).components(separatedBy: ".").first ?? ""
+    }
+    static var nibName: String {
+        return identifier
+    }
+    static var nib: UINib {
+        return UINib(nibName: nibName, bundle: nil)
     }
 }

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CalendarMonthEventViewCell: UICollectionViewCell {
+class CalendarMonthEventViewCell: UICollectionViewCell, SingleReuseIdentifier {
     
     private let imageSize: CGSize = CGSize(width: 20, height: 20)
     private let contentInsets = NSDirectionalEdgeInsets(top: 3, leading: 1, bottom: 1, trailing: 1)

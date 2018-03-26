@@ -13,13 +13,9 @@ protocol CalendarMonthSupplementaryViewDelegate: class {
     func moreItemsDidTap(sectionIndex: Int, view: UIView, date: Date)
 }
 
-class CalendarMonthSupplementaryView: UICollectionReusableView {
+class CalendarMonthSupplementaryView: UICollectionReusableView, SingleReuseIdentifier {
     
     private var sectionIndex: Int?
-    
-    override var reuseIdentifier: String? {
-        return "SupplementaryCell"
-    }
 
     private(set) var dateInterval: DateInterval?
     private(set) var dateFormatter: DateFormatter?
@@ -68,6 +64,16 @@ class CalendarMonthSupplementaryView: UICollectionReusableView {
         self.dateFormatter = viewModel.dateFormatter
         self.selectedMonthInterval = viewModel.selectedMonthInterval
         self.numberOfHiddenItemsPerDay = viewModel.numberOfHiddenItemsPerDay
+        initialSetup()
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        initialSetup()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
         initialSetup()
     }
     
