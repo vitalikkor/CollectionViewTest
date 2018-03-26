@@ -79,7 +79,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let supplementaryView = collectionView.dequeueReusableSupplementaryView(ofKind: CalendarMonthViewCustomLayout.Element.supplementaryView.kind, withReuseIdentifier: CalendarMonthSupplementaryView.identifier, for: indexPath) as! CalendarMonthSupplementaryView
-        let viewModelForSupplementaryView = dataSource.supplementaryViewModel(for: indexPath)
+        let viewModelForSupplementaryView = dataSource.supplementaryViewModel(for: indexPath.section)
         supplementaryView.setupData(with: viewModelForSupplementaryView)
         supplementaryView.delegate = self
         return supplementaryView

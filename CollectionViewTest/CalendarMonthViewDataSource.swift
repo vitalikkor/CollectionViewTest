@@ -147,9 +147,9 @@ class CalendarMonthViewDataSource {
         return CalendarMonthHeaderViewModel(dateFormatter: weekDayNamesDateFormatter, dateInterval: dateInterval, colorBackground: UIColor.lightGray)
     }
     
-    func supplementaryViewModel(for indexPath: IndexPath) -> CalendarMonthSectionViewModel {
-        let dateInterval = monthSections[indexPath.section].dateInteval
-        let hidenItems = monthSections[indexPath.section].hiddenEvents.mapValues{$0.count}
+    func supplementaryViewModel(for section: Int) -> CalendarMonthSectionViewModel {
+        let dateInterval = monthSections[section].dateInteval
+        let hidenItems = monthSections[section].hiddenEvents.mapValues{$0.count}
         return CalendarMonthSectionViewModel(dateInterval: dateInterval, selectedMonthInterval: selectedMonth, dateFormatter: monthDateFormatter, numberOfHidenItemsPerDay: hidenItems)
     }
     
